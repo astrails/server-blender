@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+
+require 'blender'
+include Blender
+
+# commands are just ruby scripts in lib/blender/cli
+COMMANDS_DIR = path("lib/blender/cli")
+COMMANDS = Dir["#{COMMANDS_DIR}/*rb"].map {|f| File.basename(f).split(".").first}
+
+command = ARGV.shift
+unless command && COMMANDS.include?(command)
+  abort "valid commands: #{COMMANDS * " "}"
+end
+
+require 'optparse'
+require "blender/cli/#{command}"
