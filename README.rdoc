@@ -1,0 +1,17 @@
+= blender
+
+To 'bootstrap' remote host run:
+$ blender init USER@HOST
+
+To apply a directory of recipes on remote host run:
+$ blender mix RECIPES_DIRECTORY [-r RECIPE] USER@HOST
+
+Exmples
+
+$ blender init root@foobar.com
+$ blender mix my_recipes root@foobar.com # will run my_recipes/default.rb
+$ blender mix my_recipes -r extra root@foobar.com # will run my_recipes/extra.rb
+
+== Copyright
+
+Copyright (c) 2009 Vitaly Kushner. See LICENSE for details.
