@@ -23,12 +23,19 @@ if !supported_version; then
 	exit
 fi
 
-mv /tmp/apt-sources.list /etc/apt/sources.list
-
 apt-get update
 apt-get upgrade -qy
 apt-get autoremove -qy
 
-apt-get install -qy ruby rubygems
+apt-get install -q -y git-core build-essential zlib1g-dev libssl-dev libreadline5-dev wget
+apt-get install -q -y ruby-full
+
+pushd /tmp
+wget http://rubyforge.org/frs/download.php/45905/rubygems-1.3.1.tgz
+tar xfz rubygems-1.3.1.tgz
+pushd rubygems-1.3.1
+ruby setup.rb
+ln -s /usr/bin/gem1.8 /usr/bin/gem
+gem update --system
 
 gem install --no-rdoc --no-ri shadow_puppet
