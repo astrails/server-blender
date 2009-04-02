@@ -9,6 +9,7 @@ begin
     gem.email = "vitaly@astrails.com"
     gem.homepage = "http://github.com/astrails/blender"
     gem.authors = ["Vitaly Kushner"]
+    gem.files = FileList["[A-Z]*.*", "{bin,generators,lib,test,spec}/**/*"] + Dir["files/**/*"]
 
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end

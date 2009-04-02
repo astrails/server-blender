@@ -1,11 +1,16 @@
-USAGE = "Usage: blender mix [options] RECIPES_DIR HOST"
 options = {
   :recipe => 'default'
 }
 opts = OptionParser.new do |opts|
-  opts.banner = USAGE
+  opts.banner = <<-USAGE
+Usage: blender mix [options] [DIR]  HOST
 
-  opts.on("-r", "--recipe RECIPE") do |val|
+Note: "." used if DIR not specified
+
+Options:
+USAGE
+
+  opts.on("-r", "--recipe RECIPE", "('default' will be used if -r not specified") do |val|
     options[:recipe] = val
   end
 end
@@ -13,6 +18,11 @@ opts.parse!
 
 dir = ARGV.shift
 host = ARGV.shift
+abort("unexpected: #{ARGV*" "}\n#{opts}") unless ARGV.empty?
+if host.nil?
+  host = dir
+  dir = "."
+end
 
 abort(opts.to_s) unless dir && host
 
@@ -27,7 +37,7 @@ unless File.file?(File.join(dir, recipe))
   abort(opts.to_s)
 end
 
-
-system("rsync -azP --delete #{dir}/ #{host}:/tmp/blender") &&
-system("scp", path("files/apt/ubuntu-intrepid-ec2-sources.list"), "#{host}:/tmp/apt-sources.list") &&
-system("ssh", host, "echo 'Running Puppet [recipe: #{recipe}]...';shadow_puppet /tmp/blender/#{recipe}")
+RECIPES = "/var/lib/blender/recipes"
+puts("rsync -azP --delete #{dir}/ #{host}:#{RECIPES}")
+system("rsync -azP --delete #{dir}/ #{host}:#{RECIPES}") &&
+system("ssh", host, "echo 'Running Puppet [recipe: #{recipe}]...';cd #{RECIPES} && shadow_puppet #{RECIPES}/#{recipe}")
