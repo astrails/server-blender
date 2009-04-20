@@ -2,19 +2,32 @@
 
 Gem::Specification.new do |s|
   s.name = %q{blender}
-  s.version = "0.0.1"
+  s.version = "0.0.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Vitaly Kushner"]
-  s.date = %q{2009-03-31}
+  s.date = %q{2009-04-20}
   s.default_executable = %q{blender}
   s.email = %q{vitaly@astrails.com}
   s.executables = ["blender"]
-  s.extra_rdoc_files = ["README.rdoc", "LICENSE"]
-  s.files = ["README.rdoc", "VERSION.yml", "bin/blender", "lib/blender", "lib/blender/cli", "lib/blender/cli/init.rb", "lib/blender/cli/mix.rb", "lib/blender/cli/provision.rb", "lib/blender/vlad.rb", "lib/blender.rb", "files/bootstrap.sh", "LICENSE"]
+  s.extra_rdoc_files = [
+    "LICENSE",
+    "README.rdoc"
+  ]
+  s.files = [
+    "README.rdoc",
+    "VERSION.yml",
+    "bin/blender",
+    "files/bootstrap.sh",
+    "lib/blender.rb",
+    "lib/blender/cli/init.rb",
+    "lib/blender/cli/mix.rb",
+    "lib/blender/cli/provision.rb",
+    "lib/blender/vlad.rb"
+  ]
   s.has_rdoc = true
   s.homepage = %q{http://github.com/astrails/blender}
-  s.rdoc_options = ["--inline-source", "--charset=UTF-8"]
+  s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.1}
   s.summary = %q{Server provisioning and maintenance tool}
