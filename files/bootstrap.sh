@@ -45,7 +45,7 @@ ln -s /usr/bin/gem1.8 /usr/bin/gem
 gem update --system
 
 # shadow puppet
-gem install --no-rdoc --no-ri shadow_puppet
+gem install --no-rdoc --no-ri shadow_puppet ruby-debug
 
 # blender
 mkdir -p /var/lib/blender/{recipes,logs,tmp}
