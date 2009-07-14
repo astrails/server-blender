@@ -2,28 +2,28 @@
 
 Gem::Specification.new do |s|
   s.name = %q{blender}
-  s.version = "0.0.2"
+  s.version = "0.0.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Vitaly Kushner"]
-  s.date = %q{2009-04-20}
+  s.date = %q{2009-07-14}
   s.default_executable = %q{blender}
   s.email = %q{vitaly@astrails.com}
   s.executables = ["blender"]
   s.extra_rdoc_files = [
     "LICENSE",
-    "README.rdoc"
+     "README.rdoc"
   ]
   s.files = [
     "README.rdoc",
-    "VERSION.yml",
-    "bin/blender",
-    "files/bootstrap.sh",
-    "lib/blender.rb",
-    "lib/blender/cli/init.rb",
-    "lib/blender/cli/mix.rb",
-    "lib/blender/cli/provision.rb",
-    "lib/blender/vlad.rb"
+     "VERSION.yml",
+     "bin/blender",
+     "files/bootstrap.sh",
+     "lib/blender.rb",
+     "lib/blender/cli/init.rb",
+     "lib/blender/cli/mix.rb",
+     "lib/blender/cli/provision.rb",
+     "lib/blender/vlad.rb"
   ]
   s.has_rdoc = true
   s.homepage = %q{http://github.com/astrails/blender}

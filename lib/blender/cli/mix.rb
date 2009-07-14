@@ -38,6 +38,7 @@ unless File.file?(File.join(dir, recipe))
 end
 
 RECIPES = "/var/lib/blender/recipes"
-puts("rsync -azP --delete #{dir}/ #{host}:#{RECIPES}")
-system("rsync -azP --delete #{dir}/ #{host}:#{RECIPES}") &&
+cmd = "rsync -azP --delete --exclude other #{dir}/ #{host}:#{RECIPES}"
+puts cmd
+system(cmd) &&
 system("ssh", host, "echo 'Running Puppet [recipe: #{recipe}]...';cd #{RECIPES} && shadow_puppet #{RECIPES}/#{recipe}")
