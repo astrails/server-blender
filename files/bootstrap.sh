@@ -12,7 +12,6 @@ MIN_MINOR=10
 
 set -x
 
-
 function supported_version()
 {
 	. /etc/lsb-release
@@ -28,6 +27,13 @@ fi
 apt-get update
 apt-get upgrade -qy
 apt-get autoremove -qy
+
+# setup etckeeper
+apt-get install etckeeper
+cp /etc/etckeeper/etckeeper.conf /etc/etckeeper/etckeeper.conf.orig
+(rm /etc/etckeeper/etckeeper.conf; awk "/^\s*VCS=/{sub(/.*/, \"VCS=git\")};{print}" > /etc/etckeeper/etckeeper.conf) < /etc/etckeeper/etckeeper.conf
+etckeeper init
+etckeeper commit "import during bootstrap"
 
 # ruby
 apt-get install -q -y git-core build-essential zlib1g-dev libssl-dev libreadline5-dev wget
@@ -52,3 +58,28 @@ gem install --no-rdoc --no-ri shadow_puppet ruby-debug
 # blender
 mkdir -p /var/lib/blender/{recipes,logs,tmp}
 chmod 0700 /var/lib/blender/
+
+# PATH ####################
+
+## # default /etc/login.defs
+## ENV_SUPATH      PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+## ENV_PATH        PATH=/usr/local/bin:/usr/bin:/bin:/usr/games
+## # default /etc/environment
+## PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games"
+##
+## When loggin-in over SSH /etc/environment path is active
+## When doing "su - xxx" - /etc/login.defs path is active
+
+etckeeper commit "before PATH update"
+
+ENV_PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/var/lib/gems/1.8/bin
+USER_PATH=/usr/local/bin:/usr/bin:/bin:/usr/games:/var/lib/gems/1.8/bin
+ROOT_PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/var/lib/gems/1.8/bin
+
+cat <<-ENV>/etc/environment
+PATH="$ENV_PATH"
+ENV
+
+( rm /etc/login.defs; awk "/^\s*ENV_SUPATH/{sub(/.*/, \"ENV_SUPATH      PATH=$ROOT_PATH\")};/^\s*ENV_PATH/{sub(/.*/, \"ENV_PATH        PATH=$USER_PATH\")};{print}" > /etc/login.defs ) < /etc/login.defs
+
+etckeeper commit "after PATH update"
