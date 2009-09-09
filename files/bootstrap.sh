@@ -69,7 +69,9 @@ gem source -a http://gems.github.com
 ## gem update --system
 
 # shadow puppet
-gem install --no-rdoc --no-ri shadow_puppet ruby-debug
+gem install --no-rdoc --no-ri puppet -v 0.24.8
+gem install --no-rdoc --no-ri shadow_puppet -v 0.3.0
+gem install --no-rdoc --no-ri ruby-debug
 
 
 # PATH ####################
