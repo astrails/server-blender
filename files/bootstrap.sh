@@ -7,6 +7,13 @@ Hostname: `hostname`
 System: `uname -a`
 _
 
+# blender
+mkdir -p /var/lib/blender/{recipes,logs,tmp}
+chmod 0700 /var/lib/blender/
+
+exec 1>> /var/lib/blender/logs/blender-bootstrap.log
+exec 2>&1
+
 MIN_MAJOR=9
 MIN_MINOR=4
 
@@ -37,14 +44,14 @@ apt-get upgrade -qy
 apt-get autoremove -qy
 
 # setup etckeeper
-apt-get -q -y install etckeeper
+apt-get -q -y install git-core etckeeper
 cp /etc/etckeeper/etckeeper.conf /etc/etckeeper/etckeeper.conf.orig
 (rm /etc/etckeeper/etckeeper.conf; awk "/^\s*VCS=/{sub(/.*/, \"VCS=git\")};{print}" > /etc/etckeeper/etckeeper.conf) < /etc/etckeeper/etckeeper.conf
 etckeeper init
 etckeeper commit "import during bootstrap"
 
 # ruby
-apt-get install -q -y git-core build-essential zlib1g-dev libssl-dev libreadline5-dev wget
+apt-get install -q -y build-essential zlib1g-dev libssl-dev libreadline5-dev wget
 apt-get install -q -y ruby irb ruby-dev libopenssl-ruby
 
 # rubygems
@@ -64,9 +71,6 @@ gem source -a http://gems.github.com
 # shadow puppet
 gem install --no-rdoc --no-ri shadow_puppet ruby-debug
 
-# blender
-mkdir -p /var/lib/blender/{recipes,logs,tmp}
-chmod 0700 /var/lib/blender/
 
 # PATH ####################
 
