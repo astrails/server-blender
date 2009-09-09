@@ -7,8 +7,8 @@ Hostname: `hostname`
 System: `uname -a`
 _
 
-MIN_MAJOR=8
-MIN_MINOR=10
+MIN_MAJOR=9
+MIN_MINOR=4
 
 set -x
 
@@ -29,7 +29,7 @@ apt-get upgrade -qy
 apt-get autoremove -qy
 
 # setup etckeeper
-apt-get install etckeeper
+apt-get -q -y install etckeeper
 cp /etc/etckeeper/etckeeper.conf /etc/etckeeper/etckeeper.conf.orig
 (rm /etc/etckeeper/etckeeper.conf; awk "/^\s*VCS=/{sub(/.*/, \"VCS=git\")};{print}" > /etc/etckeeper/etckeeper.conf) < /etc/etckeeper/etckeeper.conf
 etckeeper init
@@ -37,10 +37,11 @@ etckeeper commit "import during bootstrap"
 
 # ruby
 apt-get install -q -y git-core build-essential zlib1g-dev libssl-dev libreadline5-dev wget
-apt-get install -q -y ruby irb ruby-dev
+apt-get install -q -y ruby irb ruby-dev libopenssl-ruby
 
 # rubygems
 apt-get install -q -y rubygems
+gem source -a http://gems.github.com
 ## apt-get remove -qy --purge rubygems
 ## apt-get autoremove -qy
 ##
