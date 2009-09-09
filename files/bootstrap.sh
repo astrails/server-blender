@@ -23,6 +23,14 @@ if ! supported_version; then
 	exit
 fi
 
+# protect ec2-ami-tools from downgrade
+
+cat <<-PREFS >/etc/apt/preferences
+Package: ec2-ami-tools
+Pin: version 1.3-34545
+Pin-Priority: 500
+PREFS
+
 # update
 apt-get update
 apt-get upgrade -qy
