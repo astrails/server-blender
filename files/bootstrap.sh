@@ -43,6 +43,8 @@ apt-get update
 apt-get upgrade -qy
 apt-get autoremove -qy
 
+apt-get install -q -y rsync
+
 # setup etckeeper
 apt-get -q -y install git-core etckeeper
 cp /etc/etckeeper/etckeeper.conf /etc/etckeeper/etckeeper.conf.orig
@@ -91,7 +93,7 @@ ENV_PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games
 USER_PATH=/usr/local/bin:/usr/bin:/bin:/usr/games:/var/lib/gems/1.8/bin
 ROOT_PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/var/lib/gems/1.8/bin
 
-cat <<-ENV>/etc/environment
+cat <<-ENV >/etc/environment
 PATH="$ENV_PATH"
 ENV
 
