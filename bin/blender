@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require 'blender'
+require File.expand_path(File.join(__FILE__, "../../lib/blender"))
 include Blender
 
 # commands are just ruby scripts in lib/blender/cli
@@ -13,4 +13,4 @@ unless command && COMMANDS.include?(command)
 end
 
 require 'optparse'
-require "blender/cli/#{command}"
+require File.expand_path(File.join(__FILE__, "../../lib/blender/cli/", command))
