@@ -6,10 +6,23 @@ OptionParser.new do |opts|
   opts.banner = "Usage: blender start [OPTIONS] [-- [ec2run options]]"
   opts.separator "Options:"
 
-  opts.on("--ami AMI", "use specified AMI instead of the default one.") do |val|
+  opts.on("--ami AMI",
+    "use specified AMI instead of the default one.",
+    "If you don't specify your own AMI blender will choose a defaule one:",
+    "* #{AMI_32} for 32 bits",
+    "* #{AMI_64} for 64 bits",
+    "You can change the defaults by writing your own AMIs",
+    "into ~/.blender/ami and ~/.blender/ami64 files",
+    " "
+  ) do |val|
     options[:ami] = val
   end
-  opts.on("--key KEY", "use KEY when starting instance. KEY should already be generated.") do |val|
+  opts.on("--key KEY",
+    "use KEY when starting instance. KEY should already be generated.",
+    "If you don't specify a KEY blender will try to use the key from your EC2 account",
+    "Note: There must be only ONE key on the account for it to work. ",
+    " "
+  ) do |val|
     options[:key] = val
   end
   opts.on("--64", "use 64 bit default AMI. This does nothing if you specify your own AMI") do
@@ -26,15 +39,6 @@ OptionParser.new do |opts|
     puts opts
     exit
   end
-
-  opts.separator ""
-  opts.separator "If you don't specify your own AMI blender will choose a defaule one:"
-  opts.separator "    #{AMI_32} for 32 bits"
-  opts.separator "    #{AMI_64} for 64 bits"
-
-  opts.separator ""
-  opts.separator "You can modify those defaults by writing your own AMIs into ~/.blender/ami and ~/.blender/ami64 files"
-
 
 end.parse!
 
