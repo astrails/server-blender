@@ -2,17 +2,26 @@ options = {
   :recipe => 'default'
 }
 opts = OptionParser.new do |opts|
-  opts.banner = <<-USAGE
-Usage: blender mix [options] [DIR]  HOST
+  opts.banner = "Usage: blender mix [OPTIONS] [DIR] HOST"
+  opts.separator "Options:"
 
-Note: "." used if DIR not specified
-
-Options:
-USAGE
-
-  opts.on("-r", "--recipe RECIPE", "('default' will be used if -r not specified") do |val|
+  opts.on("-r", "--recipe RECIPE", "('default' will be used if RECIPE not specified") do |val|
     options[:recipe] = val
   end
+
+  opts.separator ""
+  opts.separator "Common options:"
+
+  opts.on("-h", "--help", "Show this message") do
+    puts opts
+    exit
+  end
+
+  opts.separator ""
+  opts.separator "Notes:"
+  opts.separator '    "." used if DIR not specified'
+
+
 end
 opts.parse!
 

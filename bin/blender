@@ -9,7 +9,12 @@ COMMANDS = Dir["#{COMMANDS_DIR}/*rb"].map {|f| File.basename(f).split(".").first
 
 command = ARGV.shift
 unless command && COMMANDS.include?(command)
-  abort "valid commands: #{COMMANDS * " "}"
+  abort <<-USAGE
+Usage: blender COMMAND [OPTIONS]
+
+Available commands: #{COMMANDS * " "}
+Run "blender COMMAND -h" to get help about a command
+  USAGE
 end
 
 require 'optparse'
