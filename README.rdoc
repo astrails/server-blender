@@ -6,7 +6,7 @@ $ blender init USER@HOST
 To apply a directory of recipes on remote host run:
 $ blender mix RECIPES_DIRECTORY [-r RECIPE] USER@HOST
 
-Exmples
+Examples
 
 $ blender init root@foobar.com
 $ blender mix my_recipes root@foobar.com # will run my_recipes/default.rb
