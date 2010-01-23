@@ -1,0 +1,13 @@
+
+- extrace generic parts from recipes into blender
+- need concept to handle cloud and client-side processing
+  - creating instances
+  - creating volumes
+  - passing data to the instances
+  - passing data between instances
+
+
+
+
+
+

@@ -21,7 +21,6 @@ opts = OptionParser.new do |opts|
   opts.separator "Notes:"
   opts.separator '    "." used if DIR not specified'
 
-
 end
 opts.parse!
 
@@ -46,8 +45,10 @@ unless File.file?(File.join(dir, recipe))
   abort(opts.to_s)
 end
 
-RECIPES = "/var/lib/blender/recipes"
-cmd = "rsync -azP --delete --exclude other --exclude '.*' #{dir}/ #{host}:#{RECIPES}"
+WORK_DIR = "/var/lib/blender/recipes"
+ROOT_MANIFEST = File.expand_path("../../manifest/root.rb", __FILE__)
+
+cmd = "rsync -azP --delete --exclude other --exclude '.*' #{dir}/ #{host}:#{WORK_DIR}"
 puts cmd
 system(cmd) &&
-system("ssh", host, "echo 'Running Puppet [recipe: #{recipe}]...';cd #{RECIPES} && shadow_puppet #{RECIPES}/#{recipe}")
+system("ssh", host, "echo 'Running Puppet [recipe: #{recipe}]...';cd #{WORK_DIR} && RECIPE=#{recipe} shadow_puppet #{ROOT_MANIFEST}")
