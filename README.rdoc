@@ -1,16 +1,33 @@
 = blender
 
-To 'bootstrap' remote host run:
-$ blender init USER@HOST
+== Introduction
 
-To apply a directory of recipes on remote host run:
-$ blender mix RECIPES_DIRECTORY [-r RECIPE] USER@HOST
+Boostrap and manage servers with shadow_puppet
 
-Examples
+Blender tries to be a fairly minimal wrapper around shadow_puppet
+http://github.com/railsmachine/shadow_puppet
+
+shadow_puppet is a Ruby interface to Puppet's manifests.
+http://reductivelabs.com/products/puppet/
+
+== Quick Start
+
+The intended usage workflow is as follows:
+
+* (optional) blender start - to start a new server instance (currently only EC2 is supported)
+* blender init root@HOSTNAME - install minimal system required to run blender recipes
+* blender mix [-r RECIPE] [DIR] root@HOSTNAME
+
+Note: root access through ssh is required for blender to work. There are no
+current plans to support sudo or some other method of privilege elevation
+
+== Examples
 
 $ blender init root@foobar.com
 $ blender mix my_recipes root@foobar.com # will run my_recipes/default.rb
 $ blender mix my_recipes -r extra root@foobar.com # will run my_recipes/extra.rb
+$ blender mix -r extra root@foobar.com # will run ./extra.rb
+
 
 == Copyright
 
