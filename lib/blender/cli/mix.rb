@@ -46,9 +46,14 @@ unless File.file?(File.join(dir, recipe))
 end
 
 WORK_DIR = "/var/lib/blender/recipes"
-ROOT_MANIFEST = File.expand_path("../../manifest/root.rb", __FILE__)
+LOCAL_MANIFEST_DIR = File.expand_path("../../manifest", __FILE__)
+REMOTE_MANIFEST_DIR = "/var/lib/blender/manifest"
+ROOT_MANIFEST = File.join(REMOTE_MANIFEST_DIR, "root.rb")
 
-cmd = "rsync -azP --delete --exclude other --exclude '.*' #{dir}/ #{host}:#{WORK_DIR}"
-puts cmd
-system(cmd) &&
-system("ssh", host, "echo 'Running Puppet [recipe: #{recipe}]...';cd #{WORK_DIR} && RECIPE=#{recipe} shadow_puppet #{ROOT_MANIFEST}")
+def run(*cmd)
+  puts ">> #{cmd * ' '}"
+  system(*cmd)
+end
+run("rsync -azP --delete --exclude '.*' --exclude other #{LOCAL_MANIFEST_DIR}/ #{host}:#{REMOTE_MANIFEST_DIR}") &&
+run("rsync -azP --delete --exclude '.*' #{dir}/ #{host}:#{WORK_DIR}") &&
+run("ssh", host, "echo 'Running Puppet [recipe: #{recipe}]...';cd #{WORK_DIR} && RECIPE=#{recipe} shadow_puppet #{ROOT_MANIFEST}")

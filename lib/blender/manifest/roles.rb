@@ -2,6 +2,10 @@ module Blender
   module Manifest
     module Roles
 
+      def self.included(base)
+        base.send :extend, self
+      end
+
       # A very simple mechanism to define roles
       #
       # Roles to accept can be defined from environment, /etc/roles file

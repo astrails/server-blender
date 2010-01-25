@@ -2,6 +2,10 @@ module Blender
   module Manifest
     module Nodes
 
+      def self.included(base)
+        base.send :extend, self
+      end
+
       # This module encapsulates nodes handeling
       # Nodes can be declared both on a class level and inside a recipe
       # When defining a node an 'id' is associated with its hostname

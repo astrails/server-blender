@@ -5,20 +5,20 @@
 
 Gem::Specification.new do |s|
   s.name = %q{blender}
-  s.version = "0.0.6"
+  s.version = "0.0.7"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Vitaly Kushner"]
-  s.date = %q{2010-01-23}
+  s.date = %q{2010-01-25}
   s.default_executable = %q{blender}
   s.email = %q{vitaly@astrails.com}
   s.executables = ["blender"]
   s.extra_rdoc_files = [
     "LICENSE",
-     "README.rdoc"
+     "README.markdown"
   ]
   s.files = [
-    "README.rdoc",
+    "README.markdown",
      "VERSION.yml",
      "bin/blender",
      "files/bootstrap.sh",
@@ -26,7 +26,11 @@ Gem::Specification.new do |s|
      "lib/blender/cli/init.rb",
      "lib/blender/cli/mix.rb",
      "lib/blender/cli/start.rb",
-     "lib/blender/vlad.rb"
+     "lib/blender/manifest/init.rb",
+     "lib/blender/manifest/mixer.rb",
+     "lib/blender/manifest/nodes.rb",
+     "lib/blender/manifest/roles.rb",
+     "lib/blender/manifest/root.rb"
   ]
   s.homepage = %q{http://github.com/astrails/blender}
   s.rdoc_options = ["--charset=UTF-8"]
