@@ -9,6 +9,14 @@ opts = OptionParser.new do |opts|
     options[:recipe] = val
   end
 
+  opts.on("-N", "--node NODE", "force NODE as the current nodename") do |val|
+    options[:node] = val
+  end
+
+  opts.on("-R", "--roles ROLES", "comma delimited list of roles that should execute") do |val|
+    options[:roles] = val
+  end
+
   opts.separator ""
   opts.separator "Common options:"
 
@@ -56,4 +64,9 @@ def run(*cmd)
 end
 run("rsync -azP --delete --exclude '.*' --exclude other #{LOCAL_MANIFEST_DIR}/ #{host}:#{REMOTE_MANIFEST_DIR}") &&
 run("rsync -azP --delete --exclude '.*' #{dir}/ #{host}:#{WORK_DIR}") &&
-run("ssh", host, "echo 'Running Puppet [recipe: #{recipe}]...';cd #{WORK_DIR} && RECIPE=#{recipe} shadow_puppet #{ROOT_MANIFEST}")
+
+extra=""
+extra << " NODE=#{options[:node]}" if options[:node]
+extra << " ROLES=#{options[:roles]}" if options[:roles]
+
+run("ssh", host, "echo 'Running Puppet [recipe: #{recipe}]...';cd #{WORK_DIR} && RECIPE=#{recipe} #{extra} shadow_puppet #{ROOT_MANIFEST}")

@@ -15,7 +15,7 @@ module Blender
       # running host
 
       @@current_roles = if ENV['ROLES']
-        ENV['ROLES'].split
+        ENV['ROLES'].split(",")
       elsif File.exists?("/etc/roles")
         File.read("/etc/roles").strip.split
       else

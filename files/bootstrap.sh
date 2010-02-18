@@ -125,16 +125,10 @@ function install_custom_rubygems()
 	ln -s /usr/bin/gem1.8 /usr/bin/gem
 }
 
-function setup_gem_sources()
-{
-	gem source -a http://gemcutter.org
-}
-
 function install_puppet()
 {
 	log "installing puppet"
-	gem install --no-rdoc --no-ri puppet -v 0.24.8
-	gem install --no-rdoc --no-ri shadow_puppet -v 0.3.0
+	gem install --no-rdoc --no-ri shadow_puppet -v 0.3.2
 	gem install --no-rdoc --no-ri ruby-debug
 }
 
@@ -167,6 +161,13 @@ ENV
 	etckeeper commit "after PATH update"
 }
 
+function setup_node()
+{
+	if [ -n "$NODE" ]; then
+		echo $NODE > /etc/node
+	fi
+}
+
 #########################################################
 #########################################################
 
@@ -188,8 +189,11 @@ else
 fi
 
 upgrade_rubygems
-setup_gem_sources
+
+gem install rdoc # needed by most gems
 
 install_puppet
+
+setup_node
 
 etckeeper commit "bootstrapped"

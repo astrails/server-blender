@@ -1,3 +1,8 @@
+# This module encapsulates nodes handeling
+# Nodes can be declared both on a class level and inside a recipe
+# When defining a node an 'id' is associated with its hostname
+# and the node can later be reffered by this id (for example
+# to get its ip)
 module Blender
   module Manifest
     module Nodes
@@ -5,12 +10,6 @@ module Blender
       def self.included(base)
         base.send :extend, self
       end
-
-      # This module encapsulates nodes handeling
-      # Nodes can be declared both on a class level and inside a recipe
-      # When defining a node an 'id' is associated with its hostname
-      # and the node can later be reffered by this id (for example
-      # to get its ip)
 
       # this holds the map from host ids to hostnames
       @@internal_hostnames = {nil => Facter.hostname}
@@ -23,14 +22,24 @@ module Blender
       end
 
       # return host's IP by its name
-      def addr(name)
-        res = `host #{hostname(name)}`.split("\n").grep(/has address/).first
+      def host_ip(name)
+        res = `host #{name}`.split("\n").grep(/has address/).first
         res && res.split.last
       end
 
+      # find out node addr. try to use external, then internal, then the host id to determine ip
+      def addr(id)
+        [
+          hostname(id, true),
+          hostname(id),
+          id
+        ].compact.uniq.map{|h| host_ip(h)}.compact.first ||
+          (current_node?(id) && "127.0.0.1") # if all else fails, we should still be able to address the current node
+      end
+
       # same as addr but throws exception if IP can't be found
-      def addr!(name)
-        addr(name) or raise "Can't find host #{name} address"
+      def addr!(id)
+        addr(id) or raise "Can't find address for '#{id}'"
       end
 
       def current_node
