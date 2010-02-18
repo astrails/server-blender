@@ -86,7 +86,7 @@ function setup_etckeeper()
 function install_stuff()
 {
 	log "installing required packages"
-	apt-get install -q -y rsync build-essential zlib1g-dev libssl-dev libreadline5-dev wget
+	apt-get install -q -y rsync build-essential zlib1g-dev libssl-dev libreadline5-dev wget bind9-host
 }
 
 function install_system_ruby()
