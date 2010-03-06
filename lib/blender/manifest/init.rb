@@ -4,11 +4,12 @@ module Blender
       
       def self.included(base)
         base.class_eval do
-          recipe :init_blender
+          recipe :create_blender_directories
         end
       end
 
-      def init_blender
+      # create blender directories
+      def create_blender_directories
         file "/var/lib/blender",
           :ensure => :directory,
           :mode => 0700,
@@ -28,6 +29,7 @@ module Blender
           :require => file("/var/lib/blender")
       end
 
+      # @return dependency for blender directories
       def builder_deps
         file("blender-installed")
       end

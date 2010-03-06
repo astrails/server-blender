@@ -11,7 +11,6 @@ module Blender
       include Init
       include Nodes
       include Roles
-      include Mixer
 
       def execute_user_recipe
         raise "no RECIPE to execute" unless recipe = ENV['RECIPE']
@@ -22,6 +21,8 @@ module Blender
       recipe :execute_user_recipe
     end
   end
+  module Recipes; end
 end
 # shadow_puppet expects to find module Foo inside file foo.rb
 Root = Blender::Manifest::Root
+include Blender::Manifest::Mixer
