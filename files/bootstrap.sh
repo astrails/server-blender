@@ -1,4 +1,13 @@
-#!/bin/bash -e
+#!/bin/bash -eu
+
+# log both to the 'real' stdout and into the log
+function log()
+{
+	echo "************* $@"
+	echo "************* $@" >&3
+}
+
+trap "log FAILED" EXIT
 
 MIN_MAJOR=9
 MIN_MINOR=4
@@ -23,19 +32,16 @@ function blender_init()
 	exec 3>&1
 
 	# redirect stdout/error to the log
-	exec 1>> /var/lib/blender/logs/blender-bootstrap.log
+	if [ -n "${TRACE:-}" ]; then
+		exec 1 | tee -a /var/lib/blender/logs/blender-bootstrap.log
+	else
+		exec 1>> /var/lib/blender/logs/blender-bootstrap.log
+	fi
 	exec 2>&1
 
 	cd /tmp
 	# lets log everything
 	set -x
-}
-
-# log both to the 'real' stdout and into the log
-function log()
-{
-	echo "************* $@"
-	echo "************* $@" >&3
 }
 
 function supported_version()
@@ -79,7 +85,7 @@ function setup_etckeeper()
 	# etckeeper comes configured for bazr. use git instead.
 	(rm /etc/etckeeper/etckeeper.conf; awk "/^\s*VCS=/{sub(/.*/, \"VCS=git\")};{print}" > /etc/etckeeper/etckeeper.conf) < /etc/etckeeper/etckeeper.conf
 	etckeeper init
-	etckeeper commit "import during bootstrap"
+	etckeeper commit "import during bootstrap" || true
 }
 
 
@@ -121,8 +127,8 @@ function install_custom_rubygems()
 	wget http://rubyforge.org/frs/download.php/60718/rubygems-1.3.5.tgz
 	tar xfz rubygems-1.3.5.tgz
 	pushd rubygems-1.3.5
-	ruby setup.rb
-	ln -s /usr/bin/gem1.8 /usr/bin/gem
+	ruby setup.rb --no-rdoc --no-ri
+	ln -sfn /usr/bin/gem1.8 /usr/bin/gem
 }
 
 function install_puppet()
@@ -146,7 +152,7 @@ function add_gems_to_system_path()
 	## When loggin-in over SSH /etc/environment path is active
 	## When doing "su - xxx" - /etc/login.defs path is active
 
-	etckeeper commit "before PATH update"
+	etckeeper commit "before PATH update" || true
 
 	ENV_PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/var/lib/gems/1.8/bin
 	USER_PATH=/usr/local/bin:/usr/bin:/bin:/usr/games:/var/lib/gems/1.8/bin
@@ -163,14 +169,14 @@ ENV
 
 function setup_node()
 {
-	if [ -n "$NODE" ]; then
+	if [ -n "${NODE:-}" ]; then
 		echo $NODE > /etc/node
 	fi
 }
 
 function setup_hostname()
 {
-	if [ -n "$HOSTNAME" ]; then
+	if [ -n "${HOSTNAME:-}" ]; then
 		echo $HOSTNAME > /etc/hostname
 		hostname $HOSTNAME
 	fi
@@ -204,4 +210,9 @@ install_puppet
 
 setup_node
 
+date > /etc/bootstraped_at
 etckeeper commit "bootstrapped"
+
+trap - EXIT
+
+echo COMPLETED

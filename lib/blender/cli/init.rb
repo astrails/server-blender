@@ -14,6 +14,10 @@ OptionParser.new do |opts|
     options[:node] = val
   end
 
+  opts.on("-t", "--trace", "dump trace to the stdout") do |val|
+    options[:trace] = true
+  end
+
   opts.on("-H", "--hostname HOSTNAME", "set HOSTNAME") do |val|
     options[:hostname] = val
   end
@@ -28,6 +32,7 @@ end.parse!
 abort("please provide a hostname") unless host = ARGV.shift
 
 extra=""
+extra << " TRACE=1" if options[:trace]
 extra << " HOSTNAME=#{options[:hostname]}" if options[:hostname]
 extra << " NODE=#{options[:node]}" if options[:node]
 
