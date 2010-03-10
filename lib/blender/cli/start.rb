@@ -1,7 +1,9 @@
 require 'pp'
 options = {}
-AMI_64 = "ami-eef61587"
-AMI_32 = "ami-ccf615a5"
+
+AMI_64 = "ami-55739e3c"
+AMI_32 = "ami-bb709dd2"
+
 OptionParser.new do |opts|
   opts.banner = "Usage: blender start [OPTIONS] [-- [ec2run options]]"
   opts.separator "Options:"
@@ -25,9 +27,11 @@ OptionParser.new do |opts|
   ) do |val|
     options[:key] = val
   end
+
   opts.on("--64", "use 64 bit default AMI. This does nothing if you specify your own AMI") do
     options[64] = true
   end
+
   opts.on("-n", "--dry-run", "Don't do anything, just print the command line to be executed") do |val|
     options[:dry] = true
   end
