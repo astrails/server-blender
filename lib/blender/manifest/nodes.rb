@@ -42,10 +42,10 @@ module Blender
         addr(id) or raise "Can't find address for '#{id}'"
       end
 
-      def current_node
+      def current_node(external = false)
         ENV['NODE'] ||
         (File.exists?("/etc/node") && File.read("/etc/node").strip) ||
-        hostname
+        hostname(nil, external)
       end
 
       def current_node?(id)
