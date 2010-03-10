@@ -14,6 +14,10 @@ OptionParser.new do |opts|
     options[:node] = val
   end
 
+  opts.on("-H", "--hostname HOSTNAME", "set HOSTNAME") do |val|
+    options[:hostname] = val
+  end
+
   opts.on("-h", "--help", "Show this message") do
     puts opts
     exit
@@ -24,6 +28,7 @@ end.parse!
 abort("please provide a hostname") unless host = ARGV.shift
 
 extra=""
+extra << " HOSTNAME=#{options[:hostname]}" if options[:hostname]
 extra << " NODE=#{options[:node]}" if options[:node]
 
 system("scp", path("files/bootstrap.sh"), "#{host}:/tmp/bootstrap.sh") &&

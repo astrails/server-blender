@@ -168,6 +168,14 @@ function setup_node()
 	fi
 }
 
+function setup_hostname()
+{
+	if [ -n "$HOSTNAME" ]; then
+		echo $HOSTNAME > /etc/hostname
+		hostname $HOSTNAME
+	fi
+}
+
 #########################################################
 #########################################################
 
