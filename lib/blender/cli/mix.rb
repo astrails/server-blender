@@ -62,6 +62,7 @@ def run(*cmd)
   puts ">> #{cmd * ' '}"
   system(*cmd)
 end
+
 run("rsync -azP --delete --exclude '.*' --exclude other #{LOCAL_MANIFEST_DIR}/ #{host}:#{REMOTE_MANIFEST_DIR}") &&
 run("rsync -azP --delete --exclude '.*' #{dir}/ #{host}:#{WORK_DIR}") &&
 

@@ -36,5 +36,10 @@ extra << " TRACE=1" if options[:trace]
 extra << " HOSTNAME=#{options[:hostname]}" if options[:hostname]
 extra << " NODE=#{options[:node]}" if options[:node]
 
-system("scp", path("files/bootstrap.sh"), "#{host}:/tmp/bootstrap.sh") &&
-system("ssh", host, "USE_SYSTEM_GEMS=#{options[:system_gems]} #{extra}/bin/bash /tmp/bootstrap.sh")
+def run(*cmd)
+  puts ">> #{cmd * ' '}"
+  system(*cmd)
+end
+
+run("scp", path("files/bootstrap.sh"), "#{host}:/tmp/bootstrap.sh") &&
+run("ssh", host, "USE_SYSTEM_GEMS=#{options[:system_gems]}#{extra} /bin/bash /tmp/bootstrap.sh")
