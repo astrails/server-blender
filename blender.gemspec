@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{blender}
-  s.version = "0.0.7"
+  s.version = "0.0.8"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Vitaly Kushner"]
-  s.date = %q{2010-03-14}
+  s.date = %q{2010-04-25}
   s.default_executable = %q{blender}
   s.email = %q{vitaly@astrails.com}
   s.executables = ["blender"]
