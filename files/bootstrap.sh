@@ -22,6 +22,23 @@ System: `uname -a`
 _
 }
 
+function setup_node()
+{
+	if [ -n "${NODE:-}" ]; then
+		echo SET NODE: $NODE
+		echo $NODE > /etc/node
+	fi
+}
+
+function setup_hostname()
+{
+	if [ -n "${HOSTNAME:-}" ]; then
+		echo SET HOSTNAME: $HOSTNAME
+		echo $HOSTNAME > /etc/hostname
+		hostname $HOSTNAME
+	fi
+}
+
 # initialize blender directory and redirect output to the log file
 function blender_init()
 {
@@ -167,26 +184,16 @@ ENV
 	etckeeper commit "after PATH update"
 }
 
-function setup_node()
-{
-	if [ -n "${NODE:-}" ]; then
-		echo $NODE > /etc/node
-	fi
-}
-
-function setup_hostname()
-{
-	if [ -n "${HOSTNAME:-}" ]; then
-		echo $HOSTNAME > /etc/hostname
-		hostname $HOSTNAME
-	fi
-}
-
 #########################################################
 #########################################################
 
 banner
+
 blender_init
+
+setup_node
+setup_hostname
+
 check_version
 pin_ami_version
 update_apt
