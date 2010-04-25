@@ -215,8 +215,6 @@ gem install rdoc # needed by most gems
 
 install_puppet
 
-setup_node
-
 date > /etc/bootstraped_at
 etckeeper commit "bootstrapped"
 
