@@ -63,8 +63,8 @@ def run(*cmd)
   system(*cmd)
 end
 
-run("rsync -azP --delete --exclude '.*' --exclude other #{LOCAL_MANIFEST_DIR}/ #{host}:#{REMOTE_MANIFEST_DIR}") &&
-run("rsync -azP --delete --exclude '.*' #{dir}/ #{host}:#{WORK_DIR}") &&
+run("rsync -azP --delete --exclude '.*' #{LOCAL_MANIFEST_DIR}/ #{host}:#{REMOTE_MANIFEST_DIR}") &&
+run("rsync -azP --delete --exclude '.*' --exclude other #{dir}/ #{host}:#{WORK_DIR}") &&
 
 extra=""
 extra << " NODE=#{options[:node]}" if options[:node]
