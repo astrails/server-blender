@@ -6,7 +6,7 @@ OptionParser.new do |opts|
   opts.separator ""
   opts.separator "Common options:"
 
-  opts.on("-u", "--upstream-gems", "don't use the sytem gems, download and install upstream version instead") do
+  opts.on("-u", "--upstream-gems", "don't use the system gems, download and install upstream version instead") do
     options[:system_gems] = 'n'
   end
 
