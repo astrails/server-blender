@@ -132,6 +132,7 @@ function upgrade_rubygems()
 	update_rubygems
 }
 
+UPSTREAM_GEMS_VERSION=1.3.6
 function install_custom_rubygems()
 {
 	log "installing custom rubygems"
@@ -139,11 +140,11 @@ function install_custom_rubygems()
 	apt-get remove -qy --purge rubygems
 	apt-get autoremove -qy
 
-	# download and install 1.3.5
+	# download and install gems
 	cd /tmp
-	wget http://rubyforge.org/frs/download.php/60718/rubygems-1.3.5.tgz
-	tar xfz rubygems-1.3.5.tgz
-	pushd rubygems-1.3.5
+	wget http://production.cf.rubygems.org/rubygems/rubygems-$UPSTREAM_GEMS_VERSION.tgz
+	tar xfz rubygems-$UPSTREAM_GEMS_VERSION.tgz
+	pushd rubygems-$UPSTREAM_GEMS_VERSION
 	ruby setup.rb --no-rdoc --no-ri
 	ln -sfn /usr/bin/gem1.8 /usr/bin/gem
 }
@@ -206,10 +207,10 @@ if [[ "${USE_SYSTEM_GEMS:-y}" == "y"  ]]; then
 	add_gems_to_system_path
 else
 	install_custom_rubygems
+	upgrade_rubygems
 	# upstream rubygems install executables into /usr/bin so no need to fix the path
 fi
 
-upgrade_rubygems
 
 gem install rdoc # needed by most gems
 
