@@ -41,5 +41,4 @@ def run(*cmd)
   system(*cmd)
 end
 
-run("scp", path("files/bootstrap.sh"), "#{host}:/tmp/bootstrap.sh") &&
-run("ssh", host, "USE_SYSTEM_GEMS=#{options[:system_gems]}#{extra} /bin/bash /tmp/bootstrap.sh")
+run "cat files/bootstrap.sh | ssh #{host} USE_SYSTEM_GEMS=#{options[:system_gems]}#{extra} /bin/bash -eu"
