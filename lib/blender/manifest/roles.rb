@@ -14,20 +14,26 @@ module Blender
       # a `node` block and so will be conditionally executed depending on the
       # running host
 
-      @@current_roles = if ENV['ROLES']
-        ENV['ROLES'].split(",")
-      elsif File.exists?("/etc/roles")
-        File.read("/etc/roles").strip.split
-      else
-        []
+      def current_roles
+        @current_roles ||=
+          if ENV['ROLES']
+            ENV['ROLES'].split(",")
+          elsif File.exists?("/etc/roles")
+            File.read("/etc/roles").strip.split
+          else
+            []
+          end
       end
 
+      # ADDS roles to the currently defined roles
       def roles *roles
-        @@current_roles += roles.map {|r| r.to_s}
+        current_roles.concat(roles.map {|r| r.to_s})
       end
 
+      # conditionally runs the code block if the role 'r' is
+      # currently defined
       def role r
-        if block_given? && @@current_roles.include?(r.to_s)
+        if block_given? && current_roles.include?(r.to_s)
           puts "ROLE: #{r}"
           yield
         end

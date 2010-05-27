@@ -12,46 +12,56 @@ module Blender
       end
 
       # this holds the map from host ids to hostnames
-      @@internal_hostnames = {nil => Facter.hostname}
-      @@external_hostnames = {nil => Facter.fqdn}
+      @@internal_hostnames = {}
+      @@external_hostnames = {}
 
       # returns hostname by id or local host's name if the id is nil
-      # will return the id itself if it can't find the mapping
       def hostname(id = nil, external = false)
-        (external ? @@external_hostnames : @@internal_hostnames)[id] || id.to_s
+        if id
+          (external ? @@external_hostnames : @@internal_hostnames)[id]
+        else
+          external ? Facter.fqdn : Facter.hostname
+        end
       end
 
-      # return host's IP by its name
+      # returns id of the node we are running at
+      # Note: will ONLY return non-nil value after (or during) node definition
+      #   unless node is forced by environment NODE variable or /etc/node file
+      def current_node
+        node = ENV['NODE'] ||
+          (File.exists?("/etc/node") && File.read("/etc/node").strip) ||
+          @@internal_hostnames.index(hostname) ||
+          @@external_hostnames.index(hostname(nil, true))
+        node && node.to_sym
+      end
+
+      # @return true if we are running on the node with the given `id`
+      def current_node?(id)
+        current_node == id.to_sym
+      end
+
+      # resolves host name using 'host' executable
+      # @return host's IP by its name or nil if not found
       def host_ip(name)
         res = `host #{name}`.split("\n").grep(/has address/).first
         res && res.split.last
       end
 
-      # find out node addr. try to use external, then internal, then the host id to determine ip
-      def addr(id)
-        [
-          hostname(id, true),
-          hostname(id),
-          id
-        ].compact.uniq.map{|h| host_ip(h)}.compact.first ||
-          (current_node?(id) && "127.0.0.1") # if all else fails, we should still be able to address the current node
-      end
-
-      # same as addr but throws exception if IP can't be found
-      def addr!(id)
-        addr(id) or raise "Can't find address for '#{id}'"
-      end
-
-      def current_node(external = false)
-        ENV['NODE'] ||
-        (File.exists?("/etc/node") && File.read("/etc/node").strip) ||
-        hostname(nil, external)
-      end
-
-      def current_node?(id)
-        [id.to_s, @@internal_hostnames[id], @@external_hostnames[id]].compact.include?(current_node)
-      end
-
+      # define node and conditionally execute code block only on the specific node
+      # Note: can be called multiple times without internal_name and external_name parameters
+      #   in which case will only do the conditional execution
+      # @param [Symbol, String] id of the host to define or test for
+      # @param [String] internal_name short hostname for the host
+      # @param [String] external_name full dns hostname for the host
+      # @example
+      #    node :app, "host5", "host5.serverfarm2.localdomain" do
+      #      ...
+      #    end
+      #
+      #    node :app do
+      #      ...
+      #    end
+      #
       def node(id, internal_name = nil, external_name = internal_name)
         return if false == internal_name # can be used to temporary 'disable' host's definition
                                          # like:
@@ -64,6 +74,23 @@ module Blender
           @node = id
           yield
         end
+      end
+
+      # find out node addr. try to use external, then internal, then the host id to determine ip
+      # @param [Symbol, String] id id of the host to resolve
+      def addr(id)
+        [hostname(id, true).to_s, hostname(id).to_s, id.to_s].each do |name|
+          ip = host_ip(name)
+          return ip if ip
+        end
+
+        # if all else fails, we should still be able to address the current node
+        current_node?(id) ? "127.0.0.1" : nil
+      end
+
+      # same as addr but throws exception if IP can't be found
+      def addr!(id)
+        addr(id) or raise "Can't find address for '#{id}'"
       end
 
     end

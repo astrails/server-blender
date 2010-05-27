@@ -68,6 +68,7 @@ module Blender
                 begin
                   recipe = recipe.to_s.camelize
                   recipe = "#{@@mix_namespace}::#{recipe}" if @@mix_namespace
+                  puts "RECIPE: #{recipe}"
                   recipe.constantize
                 end
             when Module
