@@ -82,6 +82,11 @@ function check_version()
 	fi
 }
 
+export DEBIAN_FRONTEND=noninteractive
+export DEBIAN_PRIORITY=critical
+
+APT_OPTS="-qy -o DPkg::Options::=--force-confdef -o DPkg::Options::=--force-confnew"
+
 # protect ec2-ami-tools from downgrade
 function pin_ami_version()
 {
@@ -92,18 +97,23 @@ Pin-Priority: 500
 PREFS
 }
 
-function update_apt()
+function apt_upgrade()
 {
-	log "updating apt"
+	log "apt upgrade"
 	apt-get update
-	apt-get upgrade -qy
-	apt-get autoremove -qy
+	apt-get upgrade $APT_OPTS
+	apt-get autoremove $APT_OPTS
+}
+
+function apt_install()
+{
+	apt-get install $APT_OPTS "$@"
 }
 
 function setup_etckeeper()
 {
 	log "installing etckeeper"
-	apt-get -q -y install git-core etckeeper
+	apt_install git-core etckeeper
 	cp /etc/etckeeper/etckeeper.conf /etc/etckeeper/etckeeper.conf.orig
 	# etckeeper comes configured for bazr. use git instead.
 	(rm /etc/etckeeper/etckeeper.conf; awk "/^\s*VCS=/{sub(/.*/, \"VCS=git\")};{print}" > /etc/etckeeper/etckeeper.conf) < /etc/etckeeper/etckeeper.conf
@@ -112,23 +122,23 @@ function setup_etckeeper()
 }
 
 
+
 function install_stuff()
 {
 	log "installing required packages"
-	apt-get install -q -y rsync build-essential zlib1g-dev libssl-dev libreadline5-dev wget bind9-host
+	apt_install rsync build-essential zlib1g-dev libssl-dev libreadline5-dev wget bind9-host
 }
 
 function install_system_ruby()
 {
 	log "installing system ruby"
-	apt-get install -q -y ruby irb ruby-dev libopenssl-ruby
+	apt_install ruby irb ruby-dev libopenssl-ruby
 }
 
 function install_system_rubygems()
 {
 	log "installing system rubygems"
-	apt-get install -q -y rubygems
-	gem source -a http://gemcutter.org
+	apt_install rubygems
 }
 
 function upgrade_rubygems()
@@ -203,7 +213,7 @@ setup_hostname
 
 check_version
 pin_ami_version
-update_apt
+apt_upgrade
 setup_etckeeper
 install_stuff
 install_system_ruby
