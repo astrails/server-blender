@@ -9,9 +9,6 @@ function log()
 
 trap "log FAILED" EXIT
 
-MIN_MAJOR=9
-MIN_MINOR=4
-
 function banner()
 {
 	cat <<_
@@ -61,17 +58,26 @@ function blender_init()
 	set -x
 }
 
+
+function distribution()
+{
+	echo "$DISTRIB_ID $DISTRIB_RELEASE"
+}
+
 function supported_version()
 {
 	. /etc/lsb-release
-	[[ ("$DISTRIB_ID" == "Ubuntu") && (("${DISTRIB_RELEASE%.*}" -gt "$MIN_MAJOR") || (("${DISTRIB_RELEASE%.*}" -eq "$MIN_MAJOR") && ("${DISTRIB_RELEASE#*.}" -ge "$MIN_MINOR"))) ]]
-}
 
+	case "`distribution`" in
+		"Ubuntu 10.04") true;;
+	  *) false;;
+	esac
+}
 
 function check_version()
 {
 	if ! supported_version; then
-		echo "minimal version required: $MIN_MAJOR:$MIN_MINOR"
+		log "`distribution` is not supported"
 		exit
 	fi
 }
