@@ -1,28 +1,29 @@
 require 'ruby-debug'
-$: << File.dirname(__FILE__)
+$: << File.dirname(__FILE__) # FIXME: remove?
+
 require 'init'
 require 'nodes'
 require 'roles'
 require 'mixer'
 
-module Blender
-  module Manifest
-    class Root < ::ShadowPuppet::Manifest
-      include Init
-      include Nodes
-      include Roles
+# "standard" recipe directories
+$: << "recipes" << "recipes/astrails" << "lib/astrails/blender/recipes"
 
-      def execute_user_recipe
-        raise "no RECIPE to execute" unless recipe = ENV['RECIPE']
+# add all libs in the ./vendor directory to the path
+$:.concat Dir["vendor/*/"]
 
-        code = open(recipe).read
-        instance_eval(code, recipe)
-      end
-      recipe :execute_user_recipe
-    end
+class Root < ::ShadowPuppet::Manifest
+  include Init
+  include Nodes
+  include Roles
+
+  def execute_user_recipe
+    raise "no RECIPE to execute" unless recipe = ENV['RECIPE']
+
+    code = open(recipe).read
+    instance_eval(code, recipe)
   end
-  module Recipes; end
+  recipe :execute_user_recipe
 end
-# shadow_puppet expects to find module Foo inside file foo.rb
-Root = Blender::Manifest::Root
+
 include Blender::Manifest::Mixer
