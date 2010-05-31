@@ -15,6 +15,11 @@ class Root < ::ShadowPuppet::Manifest
   include Blender::Manifest::Nodes
   include Blender::Manifest::Roles
 
+  @@mixed_recipes = []
+  def self.mixed_recipes
+    @@mixed_recipes
+  end
+
   def execute_user_recipe
     raise "no RECIPE to execute" unless recipe = ENV['RECIPE']
 

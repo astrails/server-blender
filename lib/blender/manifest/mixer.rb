@@ -12,24 +12,23 @@ module Blender::Manifest::Mixer
   # @param [[String, Symbol, Module]] recipes to mix
   def mix(*recipes)
 
-    @mixed_recipes ||= []
     recipes.each do |recipe|
 
-      next if @mixed_recipes.include?(recipe)
-      @mixed_recipes << recipe
+      next if Root.mixed_recipes.include?(recipe)
+      Root.mixed_recipes << recipe
 
       case recipe
       when String, Symbol
         require recipe.to_s
-        mixin = "Recipes::#{recipe.to_s.camelize}".constantize
+        mixin = "Blender::Recipes::#{recipe.to_s.camelize}".constantize
       when Module
         mixin = recipe
       else
         raise "Expecting String, Symbol or Module. don't know what do do with #{recipe.inspect}"
       end
 
-      puts "RECIPE: #{mixin}"
-      Root.send :include, mixin
+      puts "MIX: #{mixin}"
+      ::Root.send :include, mixin
     end
   end
 
