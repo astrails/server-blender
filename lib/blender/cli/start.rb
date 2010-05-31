@@ -36,13 +36,27 @@ OptionParser.new do |opts|
     options[:dry] = true
   end
 
-  opts.separator ""
-  opts.separator "Common options:"
+  opts.separator "\nCommon options:"
 
   opts.on("-h", "--help", "Show this message") do
     puts opts
     exit
   end
+
+  opts.on_tail <<-EXAMPLE
+
+Example:
+
+# start a 64bit instance with default options
+blender start -64
+
+# start with a custom ami
+blender start --ami ami-2d4aa444
+
+# start with passing arguments to ec2run: use security group default+test
+blender start -- -g default -g test
+  EXAMPLE
+
 
 end.parse!
 
