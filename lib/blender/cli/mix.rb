@@ -47,11 +47,9 @@ unless File.directory?(dir)
   abort(opts.to_s)
 end
 
-recipe = "#{options[:recipe]}.rb"
-unless File.file?(File.join(dir, recipe))
-  puts "recipe #{recipe} not found"
-  abort(opts.to_s)
-end
+File.file?(File.join(dir, recipe = options[:recipe])) ||
+  File.file?(File.join(dir, recipe = "#{options[:recipe]}.rb")) ||
+  abort("recipe #{recipe} not found\n#{opts}")
 
 WORK_DIR = "/var/lib/blender/recipes"
 LOCAL_MANIFEST_DIR = File.expand_path("../../manifest", __FILE__)
