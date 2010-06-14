@@ -39,11 +39,11 @@ initialize blender
 
 mix default recipe (default.rb) from directory my\_recipes
 
-    $ blender mix my\_recipes root@foobar.com
+    $ blender mix my_recipes root@foobar.com
 
 mix recipe extra.rb from directory my\_recipes
 
-    $ blender mix my\_recipes -r extra root@foobar.com # will run my\_recipes/extra.rb
+    $ blender mix my_recipes -r extra root@foobar.com # will run my_recipes/extra.rb
 
 mix recipe extra.rb from the current directory
 
