@@ -16,7 +16,7 @@ shadow\_puppet is a Ruby interface to Puppet's manifests.
 http://reductivelabs.com/products/puppet/
     DESC
     gem.email = "vitaly@astrails.com"
-    gem.homepage = "http://astrails.com/opensource/blender"
+    gem.homepage = "http://astrails.com/opensource/server-blender"
     gem.authors = ["Vitaly Kushner"]
     gem.add_development_dependency "rspec", ">= 1.2.9"
     gem.add_development_dependency "yard", ">= 0"

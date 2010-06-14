@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Vitaly Kushner"]
-  s.date = %q{2010-06-14}
+  s.date = %q{2010-06-15}
   s.default_executable = %q{blender}
   s.description = %q{Boostrap and manage servers with shadow_puppet
 
@@ -26,24 +26,23 @@ http://reductivelabs.com/products/puppet/
      "README.markdown"
   ]
   s.files = [
-    ".gitignore",
+    ".document",
+     ".gitignore",
      "LICENSE",
      "PLAN",
      "README.markdown",
      "Rakefile",
      "VERSION",
      "bin/blender",
-     "blender.gemspec",
      "files/bootstrap.sh",
      "lib/blender.rb",
      "lib/blender/cli/init.rb",
      "lib/blender/cli/mix.rb",
      "lib/blender/cli/start.rb",
-     "lib/blender/manifest/init.rb",
-     "lib/blender/manifest/mixer.rb",
-     "lib/blender/manifest/nodes.rb",
-     "lib/blender/manifest/roles.rb",
-     "lib/blender/manifest/root.rb"
+     "server-blender.gemspec",
+     "spec/server-blender_spec.rb",
+     "spec/spec.opts",
+     "spec/spec_helper.rb"
   ]
   s.homepage = %q{http://astrails.com/opensource/blender}
   s.rdoc_options = ["--charset=UTF-8"]
