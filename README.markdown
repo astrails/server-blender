@@ -13,11 +13,9 @@ working on making it not-a-hack :)
 
 Boostrap and manage servers with shadow\_puppet
 
-Blender tries to be a fairly minimal wrapper around shadow\_puppet
-http://github.com/railsmachine/shadow\_puppet
+Blender tries to be a fairly minimal wrapper around [shadow\_puppet](http://github.com/railsmachine/shadow\_puppet)
 
-shadow\_puppet is a Ruby interface to Puppet's manifests.
-http://reductivelabs.com/products/puppet/
+shadow\_puppet is a Ruby interface to [Puppet](http://reductivelabs.com/products/puppet/) manifests.
 
 During 'mixing' blender will transfer ALL files in the source directory to the
 remote server and then execute the designated 'recipe' with shadow\_puppet.
