@@ -5,6 +5,10 @@ working on making it not-a-hack :)
 
 (Note to self: write the tests already you lazy bastard! ;)
 
+* Home: [http://astrails.com/opensource/server-blender](http://astrails.com/opensource/server-blender)
+* Code: [http://github.com/astrails/server-blender](http://github.com/astrails/server-blender)
+* Blog: [http://blog.astrails.com/server-blender](http://blog.astrails.com/server-blender)
+
 ## Introduction
 
 Boostrap and manage servers with shadow\_puppet
