@@ -1,0 +1,8 @@
+--- 
+vendor/server-blender-manifests: 
+  squashed: true
+  url: git@github.com:astrails/server-blender-manifest.git
+  branch: master
+  type: git
+  revision: f6e00941b78856305d9769882dc8920557e2ed35
+  remote: braid/vendor/server-blender-manifests
