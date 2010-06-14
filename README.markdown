@@ -1,20 +1,22 @@
-# blender
+# Server Blender
 
 IMPORTANT: this is pre-alpha. interface is not near being stable.  I'm still
 working on making it not-a-hack :)
 
+(Note to self: write the tests already you lazy bastard! ;)
+
 ## Introduction
 
-Boostrap and manage servers with shadow_puppet
+Boostrap and manage servers with shadow\_puppet
 
-Blender tries to be a fairly minimal wrapper around shadow_puppet
-http://github.com/railsmachine/shadow_puppet
+Blender tries to be a fairly minimal wrapper around shadow\_puppet
+http://github.com/railsmachine/shadow\_puppet
 
-shadow_puppet is a Ruby interface to Puppet's manifests.
+shadow\_puppet is a Ruby interface to Puppet's manifests.
 http://reductivelabs.com/products/puppet/
 
 During 'mixing' blender will transfer ALL files in the source directory to the
-remote server and then execute the designated 'recipe' with shadow_puppet.
+remote server and then execute the designated 'recipe' with shadow\_puppet.
 
 ## Quick Start
 
@@ -25,7 +27,7 @@ The intended usage workflow is as follows:
 * blender mix [-r RECIPE] [DIR] root@HOSTNAME
 
 Note: root access through ssh is required for blender to work. There are no
-current plans to support sudo or some other method of privilege elevation
+current plans to support sudo or some other method of privilege elevation (but I will consider it if there is a popular demand. I'm definitely will accept patched for such support ;)
 
 ## Examples
 
@@ -33,18 +35,28 @@ initialize blender
 
     $ blender init root@foobar.com
 
-mix default recipe (default.rb) from directory my_recipes 
+mix default recipe (default.rb) from directory my\_recipes
 
-    $ blender mix my_recipes root@foobar.com
+    $ blender mix my\_recipes root@foobar.com
 
-mix recipe extra.rb from directory my_recipes
+mix recipe extra.rb from directory my\_recipes
 
-    $ blender mix my_recipes -r extra root@foobar.com # will run my_recipes/extra.rb
+    $ blender mix my\_recipes -r extra root@foobar.com # will run my\_recipes/extra.rb
 
 mix recipe extra.rb from the current directory
 
     $ blender mix -r extra root@foobar.com # will run ./extra.rb
 
+
+## Note on Patches/Pull Requests
+
+* Fork the project.
+* Make your feature addition or bug fix.
+* Add tests for it. This is important so I don't break it in a
+  future version unintentionally.
+* Commit, do not mess with rakefile, version, or history.
+  (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
+* Send me a pull request. Bonus points for topic branches.
 
 ## Copyright
 
