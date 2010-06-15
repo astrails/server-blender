@@ -205,7 +205,7 @@ setup_node
 setup_hostname
 
 check_version
-pin_ami_version
+#pin_ami_version
 apt_upgrade
 setup_etckeeper
 install_stuff
