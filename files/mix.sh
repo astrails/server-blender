@@ -27,7 +27,7 @@ ensure_gem shadow_puppet $SHADOW_PUPPET_VERSION
 ensure_gem ruby-debug
 ensure_gem server-blender-manifest $MANIFEST_VERSION
 
-echo "Mix: [recipe: $RECIPE, node: $NODE, roles: $ROLES]"
+echo "Mix: [recipe: $RECIPE, node: ${NODE:-}, roles: ${ROLES:-}]"
 
 cd /var/lib/blender/recipes
 

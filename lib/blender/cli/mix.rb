@@ -1,11 +1,9 @@
-options = {
-  :recipe => 'default'
-}
+options = {}
 opts = OptionParser.new do |opts|
   opts.banner = "Usage: blender mix [OPTIONS] [DIR] HOST"
   opts.separator "Options:"
 
-  opts.on("-r", "--recipe RECIPE", "('default' will be used if RECIPE not specified") do |val|
+  opts.on("-r", "--recipe RECIPE", "if RECIPE is not specified blender will first look for <directory_name>.rb and then for blender-recipe.rb") do |val|
     options[:recipe] = val
   end
 
@@ -47,9 +45,15 @@ unless File.directory?(dir)
   abort(opts.to_s)
 end
 
-File.file?(File.join(dir, recipe = options[:recipe])) ||
-  File.file?(File.join(dir, recipe = "#{options[:recipe]}.rb")) ||
-  abort("recipe #{options[:recipe]} not found\n#{opts}")
+# check for recipe, recipe.rb, directory_name.rb, and default.rb
+recipes = []
+if rname = options[:recipe]
+  recipes << rname << "#{rname}.rb"
+end
+recipes << "#{File.basename(File.expand_path(dir))}.rb" << "blender-recipe.rb"
+
+recipe = recipes.detect {|r| File.file?(File.join(dir, r))} ||
+  abort("recipe not found\n#{opts}")
 
 WORK_DIR = "/var/lib/blender/recipes"
 
