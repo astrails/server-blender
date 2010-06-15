@@ -1,5 +1,8 @@
 #!/bin/bash -eu
 
+SHADOW_PUPPET_VERSION="0.3.2"
+MANIFEST_VERSION="0.0.11"
+
 trap "echo FAILED" EXIT
 
 # ensure_gem GEM [VERSION]
@@ -20,16 +23,22 @@ function ensure_gem()
 	fi
 }
 
-ensure_gem shadow_puppet 0.3.2
+ensure_gem shadow_puppet $SHADOW_PUPPET_VERSION
 ensure_gem ruby-debug
-ensure_gem server-blender-manifest 0.0.9
+ensure_gem server-blender-manifest $MANIFEST_VERSION
+
+echo "Mix: [recipe: $RECIPE, node: $NODE, roles: $ROLES]"
 
 cd /var/lib/blender/recipes
-echo "Running Puppet [recipe: $RECIPE]"
 
-blender-mix-recipe $RECIPE
+ruby -rrubygems <<-RUBY
+gem 'server-blender-manifest', '$MANIFEST_VERSION'
+require 'blender/manifest'
+
+system "shadow_puppet", "_${SHADOW_PUPPET_VERSION}_", Blender::Manifest::ROOT
+RUBY
 
 trap - EXIT
 
 echo
-echo Your ServerShake is ready
+echo Your ServerShake is ready. Have fun!

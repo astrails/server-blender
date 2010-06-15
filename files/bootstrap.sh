@@ -165,13 +165,6 @@ function install_custom_rubygems()
 	ln -sfn /usr/bin/gem1.8 /usr/bin/gem
 }
 
-function install_puppet()
-{
-	log "installing puppet"
-	gem install --no-rdoc --no-ri shadow_puppet -v 0.3.2
-	gem install --no-rdoc --no-ri ruby-debug
-}
-
 # adds /var/lib/gems/1.8/bin to paths. only needed with the system (debian) braindead gems
 
 function add_gems_to_system_path()
@@ -227,10 +220,8 @@ else
 	# upstream rubygems install executables into /usr/bin so no need to fix the path
 fi
 
-
-gem install rdoc # needed by most gems
-
-install_puppet
+gem install --no-rdoc --no-ri rdoc # needed by most gems
+gem install --no-rdoc --no-ri ruby-debug # very useful to debug manifests
 
 date > /etc/bootstraped_at
 etckeeper commit "bootstrapped"
