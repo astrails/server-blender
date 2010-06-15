@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{server-blender}
-  s.version = "0.0.8"
+  s.version = "0.0.9"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Vitaly Kushner"]
@@ -36,6 +36,7 @@ http://reductivelabs.com/products/puppet/
      "VERSION",
      "bin/blender",
      "files/bootstrap.sh",
+     "files/mix.sh",
      "lib/blender.rb",
      "lib/blender/cli/init.rb",
      "lib/blender/cli/mix.rb",
