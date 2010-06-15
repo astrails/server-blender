@@ -49,23 +49,19 @@ end
 
 File.file?(File.join(dir, recipe = options[:recipe])) ||
   File.file?(File.join(dir, recipe = "#{options[:recipe]}.rb")) ||
-  abort("recipe #{recipe} not found\n#{opts}")
+  abort("recipe #{options[:recipe]} not found\n#{opts}")
 
 WORK_DIR = "/var/lib/blender/recipes"
-LOCAL_MANIFEST_DIR = File.expand_path("../../manifest", __FILE__)
-REMOTE_MANIFEST_DIR = "/var/lib/blender/manifest"
-ROOT_MANIFEST = File.join(REMOTE_MANIFEST_DIR, "root.rb")
 
 def run(*cmd)
   puts ">> #{cmd * ' '}"
   system(*cmd)
 end
 
-run("rsync -azP --delete --exclude '.*' #{LOCAL_MANIFEST_DIR}/ #{host}:#{REMOTE_MANIFEST_DIR}") &&
-run("rsync -azP --delete --exclude '.*' --exclude other #{dir}/ #{host}:#{WORK_DIR}") &&
+run("rsync -azP --delete --exclude '.*' #{dir}/ #{host}:#{WORK_DIR}") &&
 
-extra=""
-extra << " NODE=#{options[:node]}" if options[:node]
-extra << " ROLES=#{options[:roles]}" if options[:roles]
+env_config = "RECIPE=#{recipe}"
+env_config << " NODE=#{options[:node]}" if options[:node]
+env_config << " ROLES=#{options[:roles]}" if options[:roles]
 
-run("ssh", host, "echo 'Running Puppet [recipe: #{recipe}]...';cd #{WORK_DIR} && RECIPE=#{recipe} #{extra} shadow_puppet #{ROOT_MANIFEST}")
+run "cat #{File.expand_path("files/mix.sh", Blender::ROOT)} | ssh #{host} #{env_config} /bin/bash -eu"
