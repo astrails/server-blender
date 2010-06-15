@@ -26,7 +26,8 @@ http://reductivelabs.com/products/puppet/
      "README.markdown"
   ]
   s.files = [
-    ".document",
+    ".braids",
+     ".document",
      ".gitignore",
      "LICENSE",
      "PLAN",
@@ -42,9 +43,22 @@ http://reductivelabs.com/products/puppet/
      "server-blender.gemspec",
      "spec/server-blender_spec.rb",
      "spec/spec.opts",
-     "spec/spec_helper.rb"
+     "spec/spec_helper.rb",
+     "vendor/server-blender-manifests/.gitignore",
+     "vendor/server-blender-manifests/LICENSE",
+     "vendor/server-blender-manifests/README.markdown",
+     "vendor/server-blender-manifests/Rakefile",
+     "vendor/server-blender-manifests/VERSION",
+     "vendor/server-blender-manifests/lib/blender/manifest/init.rb",
+     "vendor/server-blender-manifests/lib/blender/manifest/mixer.rb",
+     "vendor/server-blender-manifests/lib/blender/manifest/nodes.rb",
+     "vendor/server-blender-manifests/lib/blender/manifest/roles.rb",
+     "vendor/server-blender-manifests/lib/blender/manifest/root.rb",
+     "vendor/server-blender-manifests/server-blender-manifest.gemspec",
+     "vendor/server-blender-manifests/spec/spec.opts",
+     "vendor/server-blender-manifests/spec/spec_helper.rb"
   ]
-  s.homepage = %q{http://astrails.com/opensource/blender}
+  s.homepage = %q{http://astrails.com/opensource/server-blender}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.6}

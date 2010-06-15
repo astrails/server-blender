@@ -41,4 +41,4 @@ def run(*cmd)
   system(*cmd)
 end
 
-run "cat files/bootstrap.sh | ssh #{host} USE_SYSTEM_GEMS=#{options[:system_gems]}#{extra} /bin/bash -eu"
+run "cat #{File.expand_path("files/bootstrap.sh", Blender::ROOT)} | ssh #{host} USE_SYSTEM_GEMS=#{options[:system_gems]}#{extra} /bin/bash -eu"
