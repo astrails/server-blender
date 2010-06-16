@@ -34,8 +34,7 @@ cd /var/lib/blender/recipes
 ruby -rrubygems <<-RUBY
 gem 'server-blender-manifest', '$MANIFEST_VERSION'
 require 'blender/manifest'
-
-system "shadow_puppet", "_${SHADOW_PUPPET_VERSION}_", Blender::Manifest::ROOT
+Blender::Manifest.run("${SHADOW_PUPPET_VERSION}")
 RUBY
 
 trap - EXIT
