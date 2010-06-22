@@ -23,6 +23,17 @@ function ensure_gem()
 	fi
 }
 
+function use_system_ruby() {
+	if [ -e /usr/local/rvm ]; then
+		echo RVM: Switch to system ruby
+		set +eu
+		. /usr/local/rvm/scripts/rvm
+		rvm use system
+		set -eu
+	fi
+}
+
+use_system_ruby
 ensure_gem shadow_puppet $SHADOW_PUPPET_VERSION
 ensure_gem ruby-debug
 ensure_gem server-blender-manifest $MANIFEST_VERSION
