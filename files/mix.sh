@@ -29,7 +29,10 @@ ensure_gem server-blender-manifest $MANIFEST_VERSION
 
 echo "Mix: [recipe: $RECIPE, node: ${NODE:-}, roles: ${ROLES:-}]"
 
+# rvm substitutes cd with its scripts/cd which accesses unbound variables
+set +u
 cd /var/lib/blender/recipes
+set -u
 
 ruby -rrubygems <<-RUBY
 gem 'server-blender-manifest', '$MANIFEST_VERSION'
