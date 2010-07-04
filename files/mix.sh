@@ -1,4 +1,4 @@
-#!/bin/bash -eu
+set -ue
 
 SHADOW_PUPPET_VERSION="0.3.2"
 MANIFEST_VERSION="0.0.14"
@@ -41,7 +41,7 @@ function run_recipe() {
 	cd /var/lib/blender/recipes
 	set -u
 
-	ruby -rrubygems <<-RUBY
+	/usr/bin/ruby -rrubygems <<-RUBY
 gem 'server-blender-manifest', '$MANIFEST_VERSION'
 require 'blender/manifest'
 Blender::Manifest.run("${SHADOW_PUPPET_VERSION}") || exit(1)

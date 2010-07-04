@@ -68,7 +68,7 @@ end
 
 
 def run_recipe(recipe, options)
-  run "cat #{File.expand_path("files/init.sh", Blender::ROOT)} | ssh #{options[:host]} /bin/bash -eu" or raise("failed init.sh")
+  run "cat #{File.expand_path("files/init.sh", Blender::ROOT)} | ssh #{options[:host]} /bin/bash -l" or raise("failed init.sh")
 
   run("rsync -qazP --delete --exclude '.*' #{options[:dir]}/ #{options[:host]}:/var/lib/blender/recipes") or raise("failed rsync")
 
@@ -76,7 +76,7 @@ def run_recipe(recipe, options)
   env_config << " NODE=#{options[:node]}" if options[:node]
   env_config << " ROLES=#{options[:roles]}" if options[:roles]
 
-  run "cat #{File.expand_path("files/mix.sh", Blender::ROOT)} | ssh #{options[:host]} #{env_config} /bin/bash -eu" or raise("failed mix.sh")
+  run "cat #{File.expand_path("files/mix.sh", Blender::ROOT)} | ssh #{options[:host]} #{env_config} /bin/bash -l" or raise("failed mix.sh")
 end
 
 def main
