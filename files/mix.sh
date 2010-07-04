@@ -33,25 +33,31 @@ function use_system_ruby() {
 	fi
 }
 
-use_system_ruby
-ensure_gem shadow_puppet $SHADOW_PUPPET_VERSION
-ensure_gem ruby-debug
-ensure_gem server-blender-manifest $MANIFEST_VERSION
+function run_recipe() {
+	echo "Mix: [recipe: $RECIPE, node: ${NODE:-}, roles: ${ROLES:-}]"
 
-echo "Mix: [recipe: $RECIPE, node: ${NODE:-}, roles: ${ROLES:-}]"
+	# rvm substitutes cd with its scripts/cd which accesses unbound variables
+	set +u
+	cd /var/lib/blender/recipes
+	set -u
 
-# rvm substitutes cd with its scripts/cd which accesses unbound variables
-set +u
-cd /var/lib/blender/recipes
-set -u
-
-ruby -rrubygems <<-RUBY
+	ruby -rrubygems <<-RUBY
 gem 'server-blender-manifest', '$MANIFEST_VERSION'
 require 'blender/manifest'
 Blender::Manifest.run("${SHADOW_PUPPET_VERSION}") || exit(1)
 RUBY
+}
+
+use_system_ruby
+ensure_gem shadow_puppet $SHADOW_PUPPET_VERSION
+ensure_gem ruby-debug
+ensure_gem server-blender-manifest $MANIFEST_VERSION
+if run_recipe; then
+	echo
+	echo "Your ServerShake is ready. Have fun!"
+else
+	echo
+	echo "Failed to mix your ServerShake. Check error messages above for details"
+fi
 
 trap - EXIT
-
-echo
-echo Your ServerShake is ready. Have fun!

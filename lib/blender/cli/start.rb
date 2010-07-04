@@ -1,64 +1,70 @@
 require 'pp'
-options = {}
 
-AMI_64 = "ami-55739e3c"
-AMI_32 = "ami-bb709dd2"
+def parse_options
+  options = {}
 
-OptionParser.new do |opts|
-  opts.banner = "Usage: blender start [OPTIONS] [-- [ec2run options]]"
-  opts.separator "Options:"
+  AMI_64 = "ami-55739e3c"
+  AMI_32 = "ami-bb709dd2"
 
-  opts.on("--ami AMI",
-    "use specified AMI instead of the default one.",
-    "If you don't specify your own AMI blender will choose a defaule one:",
-    "* #{AMI_32} for 32 bits",
-    "* #{AMI_64} for 64 bits",
-    "You can change the defaults by writing your own AMIs",
-    "into ~/.blender/ami and ~/.blender/ami64 files",
-    " "
-  ) do |val|
-    options[:ami] = val
-  end
-  opts.on("--key KEY",
-    "use KEY when starting instance. KEY should already be generated.",
-    "If you don't specify a KEY blender will try to use the key from your EC2 account",
-    "Note: There must be only ONE key on the account for it to work. ",
-    " "
-  ) do |val|
-    options[:key] = val
-  end
+  OptionParser.new do |opts|
+    opts.banner = "Usage: blender start [OPTIONS] [-- [ec2run options]]"
+    opts.separator "Options:"
 
-  opts.on("--64", "use 64 bit default AMI. This does nothing if you specify your own AMI") do
-    options[64] = true
-  end
+    opts.on("--ami AMI",
+      "use specified AMI instead of the default one.",
+      "If you don't specify your own AMI blender will choose a defaule one:",
+      "* #{AMI_32} for 32 bits",
+      "* #{AMI_64} for 64 bits",
+      "You can change the defaults by writing your own AMIs",
+      "into ~/.blender/ami and ~/.blender/ami64 files",
+      " "
+    ) do |val|
+      options[:ami] = val
+    end
+    opts.on("--key KEY",
+      "use KEY when starting instance. KEY should already be generated.",
+      "If you don't specify a KEY blender will try to use the key from your EC2 account",
+      "Note: There must be only ONE key on the account for it to work. ",
+      " "
+    ) do |val|
+      options[:key] = val
+    end
 
-  opts.on("-n", "--dry-run", "Don't do anything, just print the command line to be executed") do |val|
-    options[:dry] = true
-  end
+    opts.on("--64", "use 64 bit default AMI. This does nothing if you specify your own AMI") do
+      options[64] = true
+    end
 
-  opts.separator "\nCommon options:"
+    opts.on("-n", "--dry-run", "Don't do anything, just print the command line to be executed") do |val|
+      options[:dry] = true
+    end
 
-  opts.on("-h", "--help", "Show this message") do
-    puts opts
-    exit
-  end
+    opts.separator "\nCommon options:"
 
-  opts.on_tail <<-EXAMPLE
+    opts.on("-h", "--help", "Show this message") do
+      puts opts
+      exit
+    end
 
-Example:
+    opts.on_tail <<-EXAMPLE
 
-# start a 64bit instance with default options
-blender start -64
+  Example:
 
-# start with a custom ami
-blender start --ami ami-2d4aa444
+  # start a 64bit instance with default options
+  blender start -64
 
-# start with passing arguments to ec2run: use security group default+test
-blender start -- -g default -g test
-  EXAMPLE
+  # start with a custom ami
+  blender start --ami ami-2d4aa444
+
+  # start with passing arguments to ec2run: use security group default+test
+  blender start -- -g default -g test
+    EXAMPLE
 
 
-end.parse!
+  end.parse!
+
+
+  options
+end
 
 def default_ami(options)
   name = options[64] ? "~/.blender/ami64" : "~/.blender/ami"
@@ -74,9 +80,24 @@ def default_key(options)
   keys.first.split("\t")[1] || raise("invalid key")
 end
 
-ami = options[:ami] || default_ami(options)
-key = options[:key] || default_key(options)
+def run(*cmd)
+  system(*cmd)
+end
 
-cmd = ["ec2run", ami, "-k", key, *ARGV]
-puts cmd * " "
-system(*cmd) unless options[:dry]
+def start_ami(options)
+  ami = options[:ami] || default_ami(options)
+  key = options[:key] || default_key(options)
+
+  cmd = ["ec2run", ami, "-k", key, *ARGV]
+
+  STDERR.puts ">> #{cmd * ' '}"
+  run(cmd) unless options[:dry]
+end
+
+def main
+  options = parse_options
+  start_ami(options)
+
+rescue => e
+  abort(e.to_s)
+end

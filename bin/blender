@@ -19,3 +19,4 @@ end
 
 require 'optparse'
 require File.expand_path(File.join(__FILE__, "../../lib/blender/cli/", command))
+main

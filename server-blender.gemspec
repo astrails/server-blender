@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Vitaly Kushner"]
-  s.date = %q{2010-06-23}
+  s.date = %q{2010-07-04}
   s.default_executable = %q{blender}
   s.description = %q{Boostrap and manage servers with shadow_puppet
 
@@ -36,6 +36,7 @@ http://reductivelabs.com/products/puppet/
      "VERSION",
      "bin/blender",
      "files/bootstrap.sh",
+     "files/init.sh",
      "files/mix.sh",
      "lib/blender.rb",
      "lib/blender/cli/init.rb",
@@ -44,20 +45,7 @@ http://reductivelabs.com/products/puppet/
      "server-blender.gemspec",
      "spec/server-blender_spec.rb",
      "spec/spec.opts",
-     "spec/spec_helper.rb",
-     "vendor/server-blender-manifests/.gitignore",
-     "vendor/server-blender-manifests/LICENSE",
-     "vendor/server-blender-manifests/README.markdown",
-     "vendor/server-blender-manifests/Rakefile",
-     "vendor/server-blender-manifests/VERSION",
-     "vendor/server-blender-manifests/lib/blender/manifest/init.rb",
-     "vendor/server-blender-manifests/lib/blender/manifest/mixer.rb",
-     "vendor/server-blender-manifests/lib/blender/manifest/nodes.rb",
-     "vendor/server-blender-manifests/lib/blender/manifest/roles.rb",
-     "vendor/server-blender-manifests/lib/blender/manifest/root.rb",
-     "vendor/server-blender-manifests/server-blender-manifest.gemspec",
-     "vendor/server-blender-manifests/spec/spec.opts",
-     "vendor/server-blender-manifests/spec/spec_helper.rb"
+     "spec/spec_helper.rb"
   ]
   s.homepage = %q{http://astrails.com/opensource/server-blender}
   s.rdoc_options = ["--charset=UTF-8"]
