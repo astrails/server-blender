@@ -14,7 +14,16 @@ describe Blender::Cli::Init do
 
       proc {
         @init.parse_options(%w/--help/)
-      }.should raise_error(RuntimeError, /\AUsage:/)
+      }.should raise_error(RuntimeError, <<-USAGE)
+Usage: blender init [OPTIONS] HOST
+
+Common options:
+    -u, --upstream-gems              don't use the system gems, download and install upstream version instead
+    -N, --node NODE                  force NODE as the current nodename
+    -t, --trace                      dump trace to the stdout
+    -H, --hostname HOSTNAME          set HOSTNAME
+    -h, --help                       Show this message
+      USAGE
     end
 
     it "should throw usage on missing parameters" do
@@ -26,7 +35,7 @@ describe Blender::Cli::Init do
     it "should throw usage on extra args" do
       proc {
         @init.parse_options(%w/aaa bbb/)
-      }.should raise_error(RuntimeError, /\Aunexpected: bbb/)
+      }.should raise_error(RuntimeError, /\Aunexpected: bbb\nUsage:/)
     end
 
     it "should parse host" do

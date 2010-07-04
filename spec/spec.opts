@@ -1,1 +1,5 @@
---color
+--colour
+--format nested
+--format profile:log/spec-benchmark.log
+--loadby mtime
+--reverse

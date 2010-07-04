@@ -14,7 +14,37 @@ describe Blender::Cli::Start do
 
       proc {
         @start.parse_options(%w/--help/)
-      }.should raise_error(RuntimeError, /\AUsage:/)
+      }.should raise_error(RuntimeError, <<-USAGE)
+Usage: blender start [OPTIONS] [-- [ec2run options]]
+Options:
+    -a, --ami AMI                    use specified AMI instead of the default one.
+                                     If you don't specify your own AMI blender will choose a defaule one:
+                                     * ami-bb709dd2 for 32 bits
+                                     * ami-55739e3c for 64 bits
+                                     You can change the defaults by writing your own AMIs
+                                     into ~/.blender/ami and ~/.blender/ami64 files
+
+    -k, --key KEY                    use KEY when starting instance. KEY should already be generated.
+                                     If you don't specify a KEY blender will try to use the key from your EC2 account
+                                     Note: There must be only ONE key on the account for it to work.
+
+        --64                         use 64 bit default AMI. This does nothing if you specify your own AMI
+    -n, --dry-run                    Don't do anything, just print the command line to be executed
+
+Common options:
+    -h, --help                       Show this message
+
+Example:
+
+# start a 64bit instance with default options
+blender start -64
+
+# start with a custom ami
+blender start --ami ami-2d4aa444
+
+# start with passing arguments to ec2run: use security group default+test
+blender start -- -g default -g test
+      USAGE
     end
 
     it "should not fail with no parameters" do
@@ -26,7 +56,7 @@ describe Blender::Cli::Start do
     it "should throw usage on extra args" do
       proc {
         @start.parse_options(%w/aaa/)
-      }.should raise_error(RuntimeError, /\Aunexpected: aaa/)
+      }.should raise_error(RuntimeError, /\Aunexpected: aaa\nUsage:/)
     end
 
     it "should parse -a" do

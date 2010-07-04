@@ -30,7 +30,8 @@ class Blender::Cli::Init < Blender::Cli
         raise(opts.to_s)
       end
 
-    end.parse!(args)
+    end
+    opts.parse!(args)
 
     raise("please provide a hostname\n#{opts}") unless host = args.shift
 

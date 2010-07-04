@@ -10,7 +10,19 @@ describe Blender::Cli::Mix do
     it "should throw usage on --help" do
       proc {
         @mix.parse_options(%w/-h/)
-      }.should raise_error(RuntimeError, /\AUsage:/)
+      }.should raise_error(RuntimeError, <<-USAGE)
+Usage: blender mix [OPTIONS] [DIR] HOST
+Options:
+    -r, --recipe RECIPE              if RECIPE is not specified blender will first look for <directory_name>.rb and then for blender-recipe.rb
+    -N, --node NODE                  force NODE as the current nodename
+    -R, --roles ROLES                comma delimited list of roles that should execute
+
+Common options:
+    -h, --help                       Show this message
+
+Notes:
+    "." used if DIR not specified
+      USAGE
 
       proc {
         @mix.parse_options(%w/--help/)
@@ -26,7 +38,7 @@ describe Blender::Cli::Mix do
     it "should throw usage on extra args" do
       proc {
         @mix.parse_options(%w/aaa bbb ccc/)
-      }.should raise_error(RuntimeError, /\Aunexpected: ccc/)
+      }.should raise_error(RuntimeError, /\Aunexpected: ccc\nUsage:/)
     end
 
     it "should only arg as host and dir as ." do
@@ -85,8 +97,10 @@ describe Blender::Cli::Mix do
 
     it "should return raise error if no recipe found" do
       proc {
-        @mix.find_recipe(:dir => "path/to/foo")
-      }.should raise_error(RuntimeError, /recipe not found \(looking for foo.rb blender-recipe.rb\)/)
+        @mix.find_recipe(:dir => "path/to/foo", :usage => "Usage:")
+      }.should raise_error(
+        RuntimeError,
+        /recipe not found \(looking for foo.rb blender-recipe.rb\)\nUsage:/)
     end
 
     it "should NOT look for directory.rb if given recipe" do

@@ -18,20 +18,21 @@ class Blender::Cli::Start < Blender::Cli
         "* #{AMI_32} for 32 bits",
         "* #{AMI_64} for 64 bits",
         "You can change the defaults by writing your own AMIs",
-        "into ~/.blender/ami and ~/.blender/ami64 files",
-        " "
+        "into ~/.blender/ami and ~/.blender/ami64 files"
       ) do |val|
         options[:ami] = val
       end
 
+      opts.separator ""
+
       opts.on("-k", "--key KEY",
         "use KEY when starting instance. KEY should already be generated.",
         "If you don't specify a KEY blender will try to use the key from your EC2 account",
-        "Note: There must be only ONE key on the account for it to work. ",
-        " "
+        "Note: There must be only ONE key on the account for it to work."
       ) do |val|
         options[:key] = val
       end
+      opts.separator ""
 
       opts.on("--64", "use 64 bit default AMI. This does nothing if you specify your own AMI") do
         options[64] = true
@@ -61,7 +62,8 @@ blender start --ami ami-2d4aa444
 blender start -- -g default -g test
        EXAMPLE
 
-    end.parse!(args)
+    end
+    opts.parse!(args)
 
     raise("unexpected: #{args*" "}\n#{opts}") unless args.empty?
 
