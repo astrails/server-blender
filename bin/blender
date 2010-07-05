@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
-require File.expand_path(File.join(__FILE__, "../../lib/blender"))
+$:.unshift File.expand_path(File.join(__FILE__, "../../lib"))
+require 'blender'
 include Blender
 
 # commands are just ruby scripts in lib/blender/cli
@@ -18,5 +19,5 @@ Run "blender COMMAND -h" to get help about a command
 end
 
 require 'optparse'
-require File.expand_path(File.join(__FILE__, "../../lib/blender/cli/", command))
-command.classify.constantize.new(ARGV).execute
+require "blender/cli/#{command}"
+Blender::Cli.const_get(command.capitalize).new(ARGV).execute
