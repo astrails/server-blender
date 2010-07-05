@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Vitaly Kushner"]
-  s.date = %q{2010-07-04}
+  s.date = %q{2010-07-05}
   s.default_executable = %q{blender}
   s.description = %q{Boostrap and manage servers with shadow_puppet
 
@@ -39,11 +39,14 @@ http://reductivelabs.com/products/puppet/
      "files/init.sh",
      "files/mix.sh",
      "lib/blender.rb",
+     "lib/blender/cli.rb",
      "lib/blender/cli/init.rb",
      "lib/blender/cli/mix.rb",
      "lib/blender/cli/start.rb",
      "server-blender.gemspec",
-     "spec/server-blender_spec.rb",
+     "spec/cli/init_spec.rb",
+     "spec/cli/mix_spec.rb",
+     "spec/cli/start_spec.rb",
      "spec/spec.opts",
      "spec/spec_helper.rb"
   ]
@@ -53,7 +56,9 @@ http://reductivelabs.com/products/puppet/
   s.rubygems_version = %q{1.3.6}
   s.summary = %q{Server provisioning and configuration management tool}
   s.test_files = [
-    "spec/server-blender_spec.rb",
+    "spec/cli/init_spec.rb",
+     "spec/cli/mix_spec.rb",
+     "spec/cli/start_spec.rb",
      "spec/spec_helper.rb"
   ]
 
