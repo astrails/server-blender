@@ -70,6 +70,7 @@ function supported_version()
 
 	case "`distribution`" in
 		"Ubuntu 10.04") true;;
+		"Ubuntu 10.10") true;;
 	  *) false;;
 	esac
 }
