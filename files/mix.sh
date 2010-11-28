@@ -54,10 +54,10 @@ ensure_gem ruby-debug
 ensure_gem server-blender-manifest $MANIFEST_VERSION
 if run_recipe; then
 	echo
-	echo "Your ServerShake is ready. Have fun!"
+	echo "Your mix is ready. Have fun!"
 else
 	echo
-	echo "Failed to mix your ServerShake. Check error messages above for details"
+	echo "Mix failed. Check error messages above for details"
 fi
 
 trap - EXIT
