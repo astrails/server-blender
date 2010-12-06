@@ -1,7 +1,7 @@
 set -ue
 
 SHADOW_PUPPET_VERSION="0.3.2"
-MANIFEST_VERSION="0.0.19"
+MANIFEST_VERSION="0.1.0"
 
 trap "echo FAILED" EXIT
 
@@ -11,7 +11,7 @@ function ensure_gem()
 	if [ $# -eq 2 ]; then
 		# name + version
 		if ! gem list $1 | grep -q "$1 (\([^,]*, \)*${2//./\\.}\(, [^,]*\)*)$"; then
-			echo installing $1 $2
+			echo installing $1 -v$2
 			gem install --no-ri --no-rdoc $1 -v$2
 		fi
 	else
