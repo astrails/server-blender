@@ -19,6 +19,11 @@ System: `uname -a`
 _
 }
 
+function is_darwin()
+{
+	[[ "`uname -s`" == "Darwin" ]]
+}
+
 function setup_node()
 {
 	if [ -n "${NODE:-}" ]; then
@@ -58,7 +63,6 @@ function blender_init()
 	set -x
 }
 
-
 function distribution()
 {
 	echo "$DISTRIB_ID $DISTRIB_RELEASE"
@@ -83,19 +87,43 @@ function check_version()
 	fi
 }
 
-export DEBIAN_FRONTEND=noninteractive
-export DEBIAN_PRIORITY=critical
+XCODE=xcode_3.2.2_and_iphone_sdk_3.2_final.dmg
 
-APT_OPTS="-qy -o DPkg::Options::=--force-confdef -o DPkg::Options::=--force-confnew"
-
-# protect ec2-ami-tools from downgrade
-function pin_ami_version()
+function install_xcode()
 {
-	cat <<-PREFS >/etc/apt/preferences
-Package: ec2-ami-tools
-Pin: version 1.3-34545
-Pin-Priority: 500
-PREFS
+	if [ -e /usr/bin/gcc ]; then
+
+		log "XCODE seems to be installed"
+
+	else
+
+		log "Installing XCODE..."
+
+		if [ ! -e $XCODE ]; then
+			log "plase download $XCODE and place it in root's home directory"
+			exit
+		fi
+
+		hdiutil mount -plist -nobrowse -readonly -mountrandom /tmp -noidme $XCODE | tee /tmp/xcode-mount.xml
+
+		pkg_path=`cat /tmp/xcode-mount.xml | grep string | grep /tmp/ | cut '-d>' -f2 | cut '-d<' -f1`
+
+		log "package is mounted in $pkg_path"
+
+		installer -pkg $pkg_path/*.mpkg -target /
+
+		hdiutil eject $pkg_path
+
+		log "XCODE installed"
+
+	fi
+}
+
+function set_apt_options()
+{
+	export DEBIAN_FRONTEND=noninteractive
+	export DEBIAN_PRIORITY=critical
+	APT_OPTS="-qy -o DPkg::Options::=--force-confdef -o DPkg::Options::=--force-confnew"
 }
 
 function apt_upgrade()
@@ -121,8 +149,6 @@ function setup_etckeeper()
 	etckeeper init
 	etckeeper commit "import during bootstrap" || true
 }
-
-
 
 function install_stuff()
 {
@@ -167,7 +193,6 @@ function install_custom_rubygems()
 }
 
 # adds /var/lib/gems/1.8/bin to paths. only needed with the system (debian) braindead gems
-
 function add_gems_to_system_path()
 {
 	log "fixing system path"
@@ -195,6 +220,18 @@ ENV
 	etckeeper commit "after PATH update"
 }
 
+function install_rubygems()
+{
+	if [[ "${USE_SYSTEM_GEMS:-y}" == "y"  ]]; then
+		install_system_rubygems
+		add_gems_to_system_path
+	else
+		install_custom_rubygems
+		upgrade_rubygems
+		# upstream rubygems install executables into /usr/bin so no need to fix the path
+	fi
+}
+
 #########################################################
 #########################################################
 
@@ -205,28 +242,24 @@ blender_init
 setup_node
 setup_hostname
 
-check_version
-#pin_ami_version
-apt_upgrade
-setup_etckeeper
-install_stuff
-install_system_ruby
-
-if [[ "${USE_SYSTEM_GEMS:-y}" == "y"  ]]; then
-	install_system_rubygems
-	add_gems_to_system_path
+if is_darwin; then
+	install_xcode
 else
-	install_custom_rubygems
-	upgrade_rubygems
-	# upstream rubygems install executables into /usr/bin so no need to fix the path
+	check_version
+	set_apt_options
+	apt_upgrade
+	setup_etckeeper
+	install_stuff
+	install_system_ruby
+	install_rubygems
+
+	etckeeper commit "bootstrapped"
 fi
 
+log "Installing some gems"
 gem install --no-rdoc --no-ri rdoc # needed by most gems
 gem install --no-rdoc --no-ri ruby-debug # very useful to debug manifests
 
 date > /etc/bootstraped_at
-etckeeper commit "bootstrapped"
-
 trap - EXIT
-
 echo COMPLETED
