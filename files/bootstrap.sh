@@ -73,6 +73,7 @@ function supported_version()
 	. /etc/lsb-release
 
 	case "`distribution`" in
+		"Ubuntu 9.10") true;;
 		"Ubuntu 10.04") true;;
 		"Ubuntu 10.10") true;;
 	  *) false;;
@@ -217,7 +218,7 @@ ENV
 
 	( rm /etc/login.defs; awk "/^\s*ENV_SUPATH/{sub(/.*/, \"ENV_SUPATH      PATH=$ROOT_PATH\")};/^\s*ENV_PATH/{sub(/.*/, \"ENV_PATH        PATH=$USER_PATH\")};{print}" > /etc/login.defs ) < /etc/login.defs
 
-	etckeeper commit "after PATH update"
+	etckeeper commit "after PATH update" || true
 }
 
 function install_rubygems()
@@ -252,8 +253,9 @@ else
 	install_stuff
 	install_system_ruby
 	install_rubygems
+	#add_gems_to_system_path
 
-	etckeeper commit "bootstrapped"
+	etckeeper commit "bootstrapped" || true # might have nothing to commit
 fi
 
 log "Installing some gems"
