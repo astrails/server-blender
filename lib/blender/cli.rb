@@ -6,7 +6,7 @@ module Blender
 
     def run(*cmd)
       STDERR.puts ">> #{cmd * ' '}"
-      system(*cmd) unless @dry
+      @dry || system(*cmd)
     end
 
   end

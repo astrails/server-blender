@@ -8,6 +8,15 @@ class Blender::Cli::Start < Blender::Cli
   def parse_options(args)
     options = {}
 
+    args, extra_args = args.inject([[]]) do |result, element|
+      if element == '--'
+        result << []
+      else
+        result.last << element
+      end
+      result
+    end
+
     opts = OptionParser.new do |opts|
       opts.banner = "Usage: blender start [OPTIONS] [-- [ec2run options]]"
       opts.separator "Options:"
@@ -67,7 +76,7 @@ blender start -- -g default -g test
 
     raise("unexpected: #{args*" "}\n#{opts}") unless args.empty?
 
-    options
+    return options, extra_args
   end
 
   def default_ami(options = {})
@@ -94,10 +103,11 @@ blender start -- -g default -g test
   end
 
   def execute
-    options = parse_options(@args)
-    start_ami(options, *@args)
+    options, extra = parse_options(@args)
+    start_ami(options, extra)
 
   rescue => e
+    puts e.backtrace
     abort(e.to_s)
   end
 

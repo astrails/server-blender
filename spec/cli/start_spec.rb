@@ -60,19 +60,25 @@ blender start -- -g default -g test
     end
 
     it "should parse -a" do
-      @start.parse_options(%w/-a ami123/)[:ami].should == "ami123"
+      @start.parse_options(%w/-a ami123/).first[:ami].should == "ami123"
     end
 
     it "should parse -k" do
-      @start.parse_options(%w/-k mykey/)[:key].should == "mykey"
+      @start.parse_options(%w/-k mykey/).first[:key].should == "mykey"
     end
 
     it "should parse --64" do
-      @start.parse_options(%w/--64/)[64].should == true
+      @start.parse_options(%w/--64/).first[64].should == true
     end
 
     it "should parse -n" do
-      @start.parse_options(%w/-n/)[:dry].should == true
+      @start.parse_options(%w/-n/).first[:dry].should == true
+    end
+
+    it "should allow extra args after --" do
+      args = %w/-a qwe -k somme_key -- -x foo -y bar baz/
+      opts, extra = @start.parse_options(args)
+      extra.should == %w/-x foo -y bar baz/
     end
 
   end
@@ -145,7 +151,13 @@ blender start -- -g default -g test
     end
   end
 
-
+  describe :execute do
+    it "should call run with proper arguments" do
+      @start = Blender::Cli::Start.new %w/-a qwe -k bar -- -g baz/
+      mock(@start).run(*%w/ec2run qwe -k bar -g baz/) {true}
+      @start.execute
+    end
+  end
 
 
 
